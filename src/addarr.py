@@ -11,7 +11,7 @@ from telegram.ext import (CallbackQueryHandler, CommandHandler,
                           Application)
 from telegram.warnings import PTBUserWarning
 
-from commons import checkAllowed, checkId, authentication, format_bytes, getAuthChats
+from commons import checkAllowed, checkId, authentication, format_bytes, getAuthChats, getService, clearUserData
 import logger
 import radarr as radarr
 import sonarr as sonarr
@@ -63,22 +63,36 @@ def main():
           authentication,
     )
         
-    
-    allSeries_handler_command = CommandHandler(config["entrypointAllSeries"], all.allSeries)
-    allSeries_handler_text = MessageHandler(
-                            filters.Regex(
-                                re.compile(r"^" + config["entrypointAllSeries"] + "$", re.IGNORECASE)
-                            ),
-                            all.allSeries,
-                        )
+    listAllMediaHandler = ConversationHandler(
+        entry_points=[
+                CommandHandler(config["entrypointAllSeries"], all.startAllSeries),
+                
+                CommandHandler(config["entrypointAllMovies"], all.startAllMovies),
 
-    allMovies_handler_command = CommandHandler(config["entrypointAllMovies"], all.allMovies)
-    allMovies_handler_text = MessageHandler(
-        filters.Regex(
-            re.compile(r"^" + config["entrypointAllMovies"] + "$", re.IGNORECASE)
-        ),
-        all.allMovies,
-    )
+                MessageHandler(
+                    filters.Regex(
+                        re.compile(r"^" + config["entrypointAllSeries"] + "$", re.IGNORECASE)
+                    ),
+                    all.startAllSeries,
+                ),
+
+                MessageHandler(
+                    filters.Regex(
+                        re.compile(r"^" + config["entrypointAllMovies"] + "$", re.IGNORECASE)
+                    ),
+                    all.startAllMovies,
+                ),
+        ],
+        states={
+            all.LS_GIVE_MOVIE_INSTANCE: [CallbackQueryHandler(all.storeMovieInstance, pattern=r"^instance=(.+)")],
+            all.LS_GIVE_SERIE_INSTANCE: [CallbackQueryHandler(all.storeSerieInstance, pattern=r"^instance=(.+)")],
+        },
+        fallbacks=[
+            CommandHandler("stop", stop),
+            MessageHandler(filters.Regex("(?i)^"+i18n.t("addarr.Stop")+"$"), stop),
+            CallbackQueryHandler(stop, pattern=f"(?i)^"+i18n.t("addarr.Stop")+"$"), 
+        ]
+    ) 
 
     deleteMedia_handler = ConversationHandler(
         entry_points=[
@@ -138,8 +152,18 @@ def main():
                 startNewMedia,
             ),
             CommandHandler(config["entrypointAdd"], startNewMedia),
-            CommandHandler(i18n.t("addarr.Movie"), startNewMedia),
-            CommandHandler(i18n.t("addarr.Series"), startNewMedia),
+            MessageHandler(
+                filters.Regex(
+                    re.compile(r"^" + i18n.t("addarr.Movie") + "$", re.IGNORECASE)
+                ),
+                startNewMedia,
+            ),
+             MessageHandler(
+                filters.Regex(
+                    re.compile(r"^" + i18n.t("addarr.Series") + "$", re.IGNORECASE)
+                ),
+                startNewMedia,
+            ),
             MessageHandler(
                 filters.Regex(
                     re.compile(
@@ -282,10 +306,7 @@ def main():
 
     application.add_handler(auth_handler_command)
     application.add_handler(auth_handler_text)
-    application.add_handler(allSeries_handler_command)
-    application.add_handler(allSeries_handler_text)
-    application.add_handler(allMovies_handler_command)
-    application.add_handler(allMovies_handler_text)
+    application.add_handler(listAllMediaHandler)
     application.add_handler(addMedia_handler)
     application.add_handler(deleteMedia_handler)
 
@@ -294,6 +315,7 @@ def main():
 
     logger.info(i18n.t("addarr.Start chatting"))
     application.run_polling()
+
 
 async def stop(update, context):
     if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
@@ -383,7 +405,8 @@ async def storeMediaType(update, context):
 
     await promptInstanceSelection(update, context)
     return GIVE_INSTANCE
-        
+
+
 async def storeTitle(update : Update, context):
     if not checkId(update):
         if (
@@ -456,6 +479,7 @@ async def storeTitle(update : Update, context):
         await promptInstanceSelection(update, context)
         return GIVE_INSTANCE
 
+
 async def promptInstanceSelection(update : Update, context):
     service_name = 'radarr' if context.user_data["choice"].lower() == i18n.t("addarr.Movie").lower() else 'sonarr'
     instances = config[service_name] 
@@ -485,6 +509,7 @@ async def promptInstanceSelection(update : Update, context):
             reply_markup=markup
         )
     context.user_data["update_msg"] = msg.message_id
+
 
 async def storeInstance(update : Update, context):
     # store selected instance and give out search results
@@ -922,7 +947,8 @@ async def storeSeasons(update, context):
                 f"Callback query [{update.callback_query.data.replace('From season: ', '').strip()}] doesn't match any of the season options. Sending seasons for selection..."
             )
             return await storeSeasons(update, context) 
-        
+
+
 async def addMedia(update, context):
     position = context.user_data["position"]
     choice = context.user_data["choice"]
@@ -1048,16 +1074,6 @@ async def addMedia(update, context):
         clearUserData(context)
         return ConversationHandler.END
 
-def getService(context):
-    if context.user_data.get("choice").lower() == i18n.t("addarr.Series").lower():
-        return sonarr
-    elif context.user_data.get("choice").lower() == i18n.t("addarr.Movie").lower():
-        return radarr
-    else:
-        raise ValueError(
-            f"Cannot determine service based on unknown or missing choice: {context.user_data.get('choice')}"
-        )
-    
 
 async def help(update, context):
     if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
@@ -1084,16 +1100,7 @@ async def help(update, context):
     return ConversationHandler.END
 
 
-def clearUserData(context):
-    logger.debug(
-        "Removing choice, title, position, paths, and output from context.user_data..."
-    )
-    for x in [
-        x
-        for x in ["choice", "title", "position", "output", "paths", "path", "qualityProfiles", "qualityProfile", "update_msg", "title_update_msg", "photo_update_msg", "selectedSeasons", "seasons"]
-        if x in context.user_data.keys()
-    ]:
-        context.user_data.pop(x)
+
 
 
 if __name__ == "__main__":

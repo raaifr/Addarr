@@ -5,6 +5,8 @@ import logger
 from config import config
 from definitions import ADMIN_PATH, CHATID_PATH, ALLOWLIST_PATH
 from translations import i18n
+import radarr as radarr
+import sonarr as sonarr
 
 # Set up logging
 logLevel = logging.DEBUG if config.get("debugLogging", False) else logging.INFO
@@ -247,3 +249,26 @@ def getAuthChats():
             chats.append(line.strip("\n"))
         file.close()
     return chats
+
+def getService(context):
+    if context.user_data.get("choice").lower() == i18n.t("addarr.Series").lower():
+        return sonarr
+    elif context.user_data.get("choice").lower() == i18n.t("addarr.Movie").lower():
+        return radarr
+    else:
+        raise ValueError(
+            f"Cannot determine service based on unknown or missing choice: {context.user_data.get('choice')}"
+        )
+    
+
+def clearUserData(context):
+    logger.debug(
+        "Removing choice, title, position, paths, and output from context.user_data..."
+    )
+    for x in [
+        x
+        for x in ["choice", "title", "position", "output", "paths", "path", "qualityProfiles", "qualityProfile", "update_msg", "title_update_msg", "photo_update_msg", "selectedSeasons", "seasons", "instance",]
+        if x in context.user_data.keys()
+    ]:
+        context.user_data.pop(x)
+
