@@ -30,7 +30,7 @@ logLevel = logging.DEBUG if config.get("debugLogging", False) else logging.INFO
 logger = logger.getLogger("addarr", logLevel, config.get("logToConsole", False))
 logger.debug(f"Addarr v{__version__} starting up...")
 
-MEDIA_AUTHENTICATED, READ_CHOICE, GIVE_OPTION, GIVE_INSTANCE, GIVE_PATHS, GIVE_QUALITY_PROFILES, SELECT_SEASONS = range (7)
+MEDIA_AUTHENTICATED, GIVE_MEDIA_TYPE, GIVE_OPTION, GIVE_INSTANCE, GIVE_PATHS, GIVE_QUALITY_PROFILES, SELECT_SEASONS = range (7)
 
 application = Application.builder().token(config["telegram"]["token"]).build()
 
@@ -84,8 +84,12 @@ def main():
                 ),
         ],
         states={
-            all.LS_GIVE_MOVIE_INSTANCE: [CallbackQueryHandler(all.storeMovieInstance, pattern=r"^instance=(.+)")],
-            all.LS_GIVE_SERIE_INSTANCE: [CallbackQueryHandler(all.storeSerieInstance, pattern=r"^instance=(.+)")],
+            all.LS_GIVE_MOVIE_INSTANCE: [
+                CallbackQueryHandler(all.storeMovieInstance, pattern=r"^instance=(.+)")
+            ],
+            all.LS_GIVE_SERIE_INSTANCE: [
+                CallbackQueryHandler(all.storeSerieInstance, pattern=r"^instance=(.+)")
+            ],
         },
         fallbacks=[
             CommandHandler("stop", stop),
@@ -147,67 +151,67 @@ def main():
             CommandHandler(config["entrypointAdd"], startNewMedia),
             MessageHandler(
                 filters.Regex(
-                    re.compile(r"^" + config["entrypointAdd"] + "$", re.IGNORECASE)
+                    re.compile(rf"(?i)^{config['entrypointAdd']}$", re.IGNORECASE)
                 ),
                 startNewMedia,
             ),
             MessageHandler(
                 filters.Regex(
-                    re.compile(r"^" + i18n.t("addarr.Movie") + "$", re.IGNORECASE)
+                    re.compile(rf"(?i)^{i18n.t('addarr.Movie')}$", re.IGNORECASE)
                 ),
                 startNewMedia,
             ),
              MessageHandler(
                 filters.Regex(
-                    re.compile(r"^" + i18n.t("addarr.Series") + "$", re.IGNORECASE)
+                    re.compile(rf"(?i)^{i18n.t('addarr.Series')}$", re.IGNORECASE)
                 ),
                 startNewMedia,
             ),
-
             MessageHandler(
                 filters.Regex(
                     re.compile(
-                        rf'^((?:{i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})) (.+)$',
+                        rf"(?i)^((?:{i18n.t('addarr.Movie')}|{i18n.t('addarr.Series')})) (.+)$",
                         re.IGNORECASE
                     )
                 ),
                 storeTitle,
             ),
+            
         ],
         states={
             MEDIA_AUTHENTICATED: [
                 MessageHandler(filters.TEXT, storeTitle),
                 CallbackQueryHandler(storeTitle, pattern=rf'^{i18n.t("addarr.Movie")}$|^{i18n.t("addarr.Series")}$'),
             ],
-            READ_CHOICE: [
+            GIVE_MEDIA_TYPE: [
                 MessageHandler(
-                    filters.Regex(f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$'),
+                    filters.Regex(f'(?i)^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$'),
                     storeMediaType,
                 ),
                 CallbackQueryHandler(storeMediaType, pattern=f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$'),
                 MessageHandler(
-                    filters.Regex(f'^({i18n.t("addarr.New")})$'),
+                    filters.Regex(f'(?i)^({i18n.t("addarr.New")})$'),
                     startNewMedia
                 ),
-                CallbackQueryHandler(startNewMedia, pattern=f'({i18n.t("addarr.New")})'),
+                CallbackQueryHandler(startNewMedia, pattern=f'(?i)^({i18n.t("addarr.New")})'),
             ],
             GIVE_INSTANCE: [
                 CallbackQueryHandler(storeInstance, pattern="^instance=(.+)$"),
             ],
             GIVE_OPTION: [
-                CallbackQueryHandler(storeSelection, pattern=f'^({i18n.t("addarr.Add")})$'),
-                CallbackQueryHandler(nextOption, pattern=f'^({i18n.t("addarr.Next result")})$'),
-                CallbackQueryHandler(startNewMedia, pattern=f'^({i18n.t("addarr.New")})$'),
+                CallbackQueryHandler(storeSelection, pattern=f'(?i)^({i18n.t("addarr.Add")})$'),
+                CallbackQueryHandler(nextOption, pattern=f'(?i)^({i18n.t("addarr.Next result")})$'),
+                CallbackQueryHandler(startNewMedia, pattern=f'(?i)^({i18n.t("addarr.New")})$'),
                 MessageHandler(
-                    filters.Regex(f'^({i18n.t("addarr.Add")})$'),
+                    filters.Regex(f'(?i)^({i18n.t("addarr.Add")})$'),
                     storeSelection
                 ),
                 MessageHandler(
-                    filters.Regex(f'^({i18n.t("addarr.Next result")})$'),
+                    filters.Regex(f'(?i)^({i18n.t("addarr.Next result")})$'),
                     nextOption
                 ),
                 MessageHandler(
-                    filters.Regex(f'^({i18n.t("addarr.New")})$'),
+                    filters.Regex(f'(?i)^({i18n.t("addarr.New")})'),
                     startNewMedia
                 ),
             ],
@@ -236,7 +240,7 @@ def main():
                 MessageHandler(
                     filters.Regex(
                         re.compile(
-                            r"" + config["entrypointTransmission"] + "", re.IGNORECASE
+                            rf'^{config["entrypointTransmission"]}$', re.IGNORECASE
                         )
                     ),
                     transmission.transmission,
@@ -249,7 +253,8 @@ def main():
             },
             fallbacks=[
                 CommandHandler("stop", stop),
-                MessageHandler(filters.Regex("^(Stop|stop)$"), stop),
+                MessageHandler(filters.Regex("(?i)^"+i18n.t("addarr.Stop")+"$"), stop),
+                CallbackQueryHandler(stop, pattern=f"(?i)^"+i18n.t("addarr.Stop")+"$"),
             ],
         )
         application.add_handler(changeTransmissionSpeed_handler)
@@ -262,7 +267,7 @@ def main():
                 MessageHandler(
                     filters.Regex(
                         re.compile(
-                            r"" + config["entrypointSabnzbd"] + "", re.IGNORECASE
+                            rf'^{config["entrypointSabnzbd"]}$', re.IGNORECASE
                         )
                     ),
                     sabnzbd.sabnzbd,
@@ -275,35 +280,39 @@ def main():
             },
             fallbacks=[
                 CommandHandler("stop", stop),
-                MessageHandler(filters.Regex("^(Stop|stop)$"), stop),
+                MessageHandler(filters.Regex("(?i)^"+i18n.t("addarr.Stop")+"$"), stop),
+                CallbackQueryHandler(stop, pattern=f"(?i)^"+i18n.t("addarr.Stop")+"$"),
             ],
         )
         application.add_handler(changeSabznbdSpeed_handler)
     
     if config["qbittorrent"]["enable"]:
         import qbittorrent as qbittorrent
+        
         changeqBittorrentSpeed_handler = ConversationHandler(
             entry_points=[
                 CommandHandler(config["entrypointqBittorrent"], qbittorrent.qbittorrent),
                 MessageHandler(
-                    filters.Regex(
-                        re.compile(
-                            r"" + config["entrypointqBittorrent"] + "", re.IGNORECASE
-                        )
-                    ),
+                    filters.Regex(rf'(?i)^{config["entrypointqBittorrent"]}$'),
                     qbittorrent.qbittorrent,
                 ),
+
             ],
             states={
-                qbittorrent.QBITTORRENT_SPEED_NORMAL: [
-                    CallbackQueryHandler(qbittorrent.changeSpeedqBittorrent),
-                ]
+                qbittorrent.QBT_AUTHENTICATE: [
+                    CallbackQueryHandler(qbittorrent.qbittorrent, pattern=rf"(?i)^{config['entrypointqBittorrent']}$"),
+                ],
+                qbittorrent.QBT_GIVE_SPEED_TYPES: [
+                    CallbackQueryHandler(qbittorrent.setClientSpeed, pattern=r"^speedtype=(.+)$"),
+                ],
             },
             fallbacks=[
                 CommandHandler("stop", stop),
-                MessageHandler(filters.Regex("^(Stop|stop)$"), stop),
+                MessageHandler(filters.Regex("(?i)^"+i18n.t("addarr.Stop")+"$"), stop),
+                CallbackQueryHandler(stop, pattern=f"(?i)^"+i18n.t("addarr.Stop")+"$"),
             ],
         )
+
         application.add_handler(changeqBittorrentSpeed_handler)
 
     application.add_handler(auth_handler_command)
@@ -321,7 +330,7 @@ def main():
     application.run_polling()
 
 
-async def stop(update, context):
+async def stop(update : Update, context: ContextTypes.DEFAULT_TYPE):
     if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
         #When using this mode, bot will remain silent if user is not in the allowlist.txt
         logger.info("Allowlist is enabled, but userID isn't added into 'allowlist.txt'. So bot stays silent")
@@ -403,9 +412,9 @@ async def storeMediaType(update: Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         choice = None
         if update.message is not None:
-            choice = update.message.text
+            choice = update.message.text.lower()
         elif update.callback_query is not None:
-            choice = update.callback_query.data
+            choice = update.callback_query.data.lower()
         context.user_data["choice"] = choice
         logger.info(f'choice: {choice}')
 
@@ -442,7 +451,7 @@ async def storeMediaType(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return GIVE_INSTANCE
 
 
-async def storeTitle(update : Update, context):
+async def storeTitle(update : Update, context: ContextTypes.DEFAULT_TYPE):
     if not checkId(update):
         if (
             await authentication(update, context) == "added"
@@ -454,7 +463,7 @@ async def storeTitle(update : Update, context):
         if update.message is not None:
             reply = update.message.text.lower()
         elif update.callback_query is not None:
-            reply = update.callback_query.data
+            reply = update.callback_query.data.lower()
         else:
             return MEDIA_AUTHENTICATED
 
@@ -476,10 +485,10 @@ async def storeTitle(update : Update, context):
                 re.IGNORECASE,
             )
             if adv_cmd:
-                context.user_data["choice"] = singleLineCommand.group(1)
+                context.user_data["choice"] = singleLineCommand.group(1).lower()
                 context.user_data["title"] = singleLineCommand.group(2)
                 logger.debug(
-                    f"User is looking for a {singleLineCommand.group(2)}, named {singleLineCommand.group(1)}"
+                    f"User is looking for a {singleLineCommand.group(1)} named '{singleLineCommand.group(2)}'"
                 )
             else:
                 logger.warning(f"There was an error parseing single line command {reply}")
@@ -508,7 +517,7 @@ async def storeTitle(update : Update, context):
                     markup = InlineKeyboardMarkup(keyboard)
                     msg = await update.message.reply_text(i18n.t("addarr.What is this?"), reply_markup=markup, do_quote=True)
                     context.user_data["update_msg"] = msg.message_id
-                    return READ_CHOICE
+                    return GIVE_MEDIA_TYPE
 
         # Prompt user to select the instance
         service_name = 'radarr' if context.user_data["choice"].lower() == i18n.t("addarr.Movie").lower() else 'sonarr'
@@ -552,7 +561,7 @@ async def storeInstance(update : Update, context: ContextTypes.DEFAULT_TYPE):
         reply = update.message.text.lower()
         logger.debug(f"reply is {reply}")
     elif update.callback_query is not None:
-        reply = update.callback_query.data
+        reply = update.callback_query.data.lower()
     else:
         return MEDIA_AUTHENTICATED
     
@@ -673,8 +682,7 @@ async def storeInstance(update : Update, context: ContextTypes.DEFAULT_TYPE):
     return GIVE_OPTION
 
 
-async def nextOption(update, context):
-    logger.debug('info')
+async def nextOption(update: Update, context: ContextTypes.DEFAULT_TYPE):
     position = context.user_data["position"] + 1
     context.user_data["position"] = position
     searchResult = context.user_data["output"]
@@ -765,7 +773,7 @@ async def nextOption(update, context):
     return GIVE_OPTION
 
 
-async def storeSelection(update : Update, context):
+async def storeSelection(update : Update, context: ContextTypes.DEFAULT_TYPE):
     # store the selected movie and prompt which root folder to use
 
     # variables in context.user_data will keep track of what the user selected based on position and stuff

@@ -1,5 +1,6 @@
 import logging
 import math
+import os
 from telegram.ext import ConversationHandler
 import logger
 from config import config
@@ -34,20 +35,33 @@ def getInstance(app):
         logger.warning('instance not set')
             
 
-def generateServerAddr(app):
+def generateServerAddr(app: str):
     try:
-        instance = getInstance(app)
-       
-        if instance["server"]["ssl"]:
-            http = "https://"
+        logger.debug(app)
+        if not app.lower() == 'radarr' and not app.lower() == 'sonarr':
+            logger.debug('generating server address for other service app')
+            if config[app]["server"]["ssl"]:
+                http = "https://"
+            else:
+                http = "http://"
+            addr = config[app]["server"]["addr"]
+            port = config[app]["server"]["port"]
+            path = config[app]["server"]["path"]
+
+            return f"{http}{addr}:{port}{path}"
         else:
-            http = "http://"
+            logger.debug('generating server address for sonarr/radarr')
+            instance = getInstance(app)
+            if instance["server"]["ssl"]:
+                http = "https://"
+            else:
+                http = "http://"
+
+            addr = instance["server"]["addr"]
+            port = instance["server"]["port"]
+            path = instance["server"]["path"]
         
-        addr = instance["server"]["addr"]
-        port = instance["server"]["port"]
-        path = instance["server"]["path"]
-        
-        return f"{http}{addr}:{port}{path}"
+            return f"{http}{addr}:{port}{path}"
        
     except KeyError as e:
         logger.warning(f"Missing key {e} in configuration for {_current_instance} instance.")
@@ -84,21 +98,26 @@ def generateApiQuery(app, endpoint, parameters={}):
 # Check if Id is authenticated
 def checkId(update):
     authorize = False
+    
+    # Check if the file exists; if not, create it
+    if not os.path.exists(CHATID_PATH):
+        with open(CHATID_PATH, "w") as file:
+            pass  # Create an empty file
+    
+    # Check if the file is empty
     with open(CHATID_PATH, "r") as file:
         firstChar = file.read(1)
-        if not firstChar:
+        if not firstChar:  # File is empty
             return False
-        file.close()
+
+    # If the file is not empty, check for the chat ID
     with open(CHATID_PATH, "r") as file:
         for line in file:
             chatId = line.strip("\n").split(" - ")[0]
             if chatId == str(update.effective_message.chat_id):
                 authorize = True
-        file.close()
-        if authorize:
-            return True
-        else:
-            return False
+
+    return authorize
 
 
 async def authentication(update, context):
@@ -169,18 +188,21 @@ def checkAllowed(update, mode):
         path = ADMIN_PATH
     else: 
         path = ALLOWLIST_PATH
+
+    if not os.path.exists(path):
+        with open(path, "w") as file:
+            pass  # Create an empty file
+
     admin = False
     user = update.effective_user
+
     with open(path, "r") as file:
         for line in file:
             chatId = line.strip("\n").split(" - ")[0]
             if chatId == str(user["username"]) or chatId == str(user["id"]):
                 admin = True
-        file.close()
-        if admin:
-            return True
-        else:
-            return False
+
+    return admin
 
 
 def format_bytes(num, suffix='B'):
@@ -265,7 +287,8 @@ def clearUserData(context):
     )
     for x in [
         x
-        for x in ["choice", "title", "position", "output", "paths", "path", "qualityProfiles", "qualityProfile", "update_msg", "title_update_msg", "photo_update_msg", "selectedSeasons", "seasons", "instance",]
+        for x in ["choice", "title", "position", "output", "paths", "path", "qualityProfiles", "qualityProfile", "update_msg", "title_update_msg", "photo_update_msg", "selectedSeasons", "seasons", "instance",
+                  "qbit_msg", "speedtype",]
         if x in context.user_data.keys()
     ]:
         context.user_data.pop(x)
