@@ -13,14 +13,14 @@ from config import config
 logLevel = logging.DEBUG if config.get("debugLogging", False) else logging.INFO
 logger = logger.getLogger("addarr.sonarr", logLevel, config.get("logToConsole", False))
 
-sonarr_config = config["sonarr"][0]
+sonarr_config = config["sonarr"] if isinstance(config["sonarr"]["instances"], list) else [config["sonarr"]["instances"]]
 
 addSerieNeededFields = ["tvdbId", "tvRageId", "title", "titleSlug", "images", "seasons"]
 
 def setInstance(label):
     global sonarr_config
-    sonarr_instances = config['sonarr']
-    commons.setLabel(label)
+    sonarr_instances = config['sonarr']['instances']
+    commons.setInstanceName(label)
 
     for instance in sonarr_instances:
         if instance["label"] == label:
@@ -28,7 +28,7 @@ def setInstance(label):
             logger.info(f"Sonarr instance set to: {label}")
             return
 
-    logger.error(f"Sonarr instance with label '{label}' not found. Default instace will be used.")
+    logger.error(f"Sonarr instance with label '{label}' not found. Default instance will be used.")
 
 def getInstance():
     global sonarr_config

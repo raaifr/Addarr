@@ -13,8 +13,7 @@ import sonarr as sonarr
 logLevel = logging.DEBUG if config.get("debugLogging", False) else logging.INFO
 logger = logger.getLogger("addarr.radarr", logLevel, config.get("logToConsole", False))
 
-LS_GIVE_MOVIE_INSTANCE, LS_GIVE_SERIE_INSTANCE = range(2)
-
+LS_GIVE_MOVIE_INSTANCE, LS_GIVE_SERIE_INSTANCE, GG_STATE = range(3)
 
 async def startAllSeries(update, context):
     # check and authenticate user
@@ -160,7 +159,7 @@ async def storeMovieInstance(update, context):
 
 async def lsPromptInstanceSelection(update : Update, context):
     service_name = 'radarr' if context.user_data["choice"].lower() == i18n.t("addarr.Movie").lower() else 'sonarr'
-    instances = config[service_name] 
+    instances = config[service_name]["instances"] 
     if len(instances) == 1:
         # There is only 1 instance, so use it!
         logger.debug(f"Only found 1 instance of {service_name}, so proceeding with that one...")

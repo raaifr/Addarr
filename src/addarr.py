@@ -8,7 +8,7 @@ import telegram
 from telegram.constants import ParseMode
 from telegram.ext import (CallbackQueryHandler, CommandHandler,
                           ConversationHandler, filters, MessageHandler,
-                          Application)
+                          ContextTypes, Application)
 from telegram.warnings import PTBUserWarning
 
 from commons import checkAllowed, checkId, authentication, format_bytes, getAuthChats, getService, clearUserData
@@ -151,7 +151,6 @@ def main():
                 ),
                 startNewMedia,
             ),
-            CommandHandler(config["entrypointAdd"], startNewMedia),
             MessageHandler(
                 filters.Regex(
                     re.compile(r"^" + i18n.t("addarr.Movie") + "$", re.IGNORECASE)
@@ -164,10 +163,11 @@ def main():
                 ),
                 startNewMedia,
             ),
+
             MessageHandler(
                 filters.Regex(
                     re.compile(
-                        rf'^{i18n.t("addarr.Find")} ((?:{i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})) (.+)$',
+                        rf'^((?:{i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})) (.+)$',
                         re.IGNORECASE
                     )
                 ),
@@ -191,14 +191,17 @@ def main():
                 ),
                 CallbackQueryHandler(startNewMedia, pattern=f'({i18n.t("addarr.New")})'),
             ],
-            GIVE_INSTANCE: [CallbackQueryHandler(storeInstance, pattern=r"^instance=(.+)")],
+            GIVE_INSTANCE: [
+                CallbackQueryHandler(storeInstance, pattern="^instance=(.+)$"),
+            ],
             GIVE_OPTION: [
-                CallbackQueryHandler(storeSelection, pattern=f'({i18n.t("addarr.Add")})'),
+                CallbackQueryHandler(storeSelection, pattern=f'^({i18n.t("addarr.Add")})$'),
+                CallbackQueryHandler(nextOption, pattern=f'^({i18n.t("addarr.Next result")})$'),
+                CallbackQueryHandler(startNewMedia, pattern=f'^({i18n.t("addarr.New")})$'),
                 MessageHandler(
                     filters.Regex(f'^({i18n.t("addarr.Add")})$'),
                     storeSelection
                 ),
-                CallbackQueryHandler(nextOption, pattern=f'({i18n.t("addarr.Next result")})'),
                 MessageHandler(
                     filters.Regex(f'^({i18n.t("addarr.Next result")})$'),
                     nextOption
@@ -207,7 +210,6 @@ def main():
                     filters.Regex(f'^({i18n.t("addarr.New")})$'),
                     startNewMedia
                 ),
-                CallbackQueryHandler(startNewMedia, pattern=f'({i18n.t("addarr.New")})'),
             ],
             GIVE_PATHS: [
                 CallbackQueryHandler(storePath, pattern="^(Path: )(.*)$"),
@@ -306,9 +308,11 @@ def main():
 
     application.add_handler(auth_handler_command)
     application.add_handler(auth_handler_text)
+
     application.add_handler(listAllMediaHandler)
     application.add_handler(addMedia_handler)
     application.add_handler(deleteMedia_handler)
+
 
     help_handler_command = CommandHandler(config["entrypointHelp"], help)
     application.add_handler(help_handler_command)
@@ -341,7 +345,7 @@ async def stop(update, context):
     return ConversationHandler.END
 
 
-async def startNewMedia(update : Update, context):
+async def startNewMedia(update : Update, context: ContextTypes.DEFAULT_TYPE):
     if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
         #When using this mode, bot will remain silent if user is not in the allowlist.txt
         logger.info("Allowlist is enabled, but userID isn't added into 'allowlist.txt'. So bot stays silent")
@@ -359,6 +363,8 @@ async def startNewMedia(update : Update, context):
         reply = update.callback_query.data.lower()
     else:
         return MEDIA_AUTHENTICATED
+    
+    logger.debug(f'user has sent: {reply}')
     
     if i18n.t("addarr.Movie").lower() in reply:
         logger.debug(
@@ -380,19 +386,19 @@ async def startNewMedia(update : Update, context):
     )
 
     if not checkAllowed(update,"admin") and config.get("adminNotifyId") is not None:
+        logger.debug('Sending admin notification')
         adminNotifyId = config.get("adminNotifyId")
         await context.bot.send_message(
-            chat_id=adminNotifyId, text=i18n.t("addarr.Notifications.Start", first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
+            chat_id=adminNotifyId, 
+            text=i18n.t("addarr.Notifications.Start", first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
         )
 
     return MEDIA_AUTHENTICATED
 
 
-async def storeMediaType(update, context):
+async def storeMediaType(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not checkId(update):
-        if (
-            await authentication(update, context) == "added"
-        ):  # To also stop the beginning command
+        if (await authentication(update, context) == "added"):  # To also stop the beginning command
             return ConversationHandler.END
     else:
         choice = None
@@ -403,8 +409,37 @@ async def storeMediaType(update, context):
         context.user_data["choice"] = choice
         logger.info(f'choice: {choice}')
 
-    await promptInstanceSelection(update, context)
-    return GIVE_INSTANCE
+        # Prompt user to select instance
+        service_name = 'radarr' if context.user_data["choice"].lower() == i18n.t("addarr.Movie").lower() else 'sonarr'
+        instances = config[service_name]["instances"] 
+
+        if len(instances) == 1:
+            # There is only 1 instance, so use it!
+            logger.debug(f"Only found 1 instance of {service_name}, so proceeding with that one...")
+            context.user_data["instance"] = instances[0]["label"]
+            await storeInstance(update, context) # skip to next step
+            return GIVE_OPTION
+
+        keyboard = []
+        for instance in instances:
+            label = instance['label']
+            keyboard += [[
+                InlineKeyboardButton(
+                label,
+                callback_data=f"instance={label}"
+                ),
+            ]]
+
+        markup = InlineKeyboardMarkup(keyboard)
+
+        await context.bot.edit_message_text(
+            message_id=context.user_data["update_msg"],
+            chat_id=update.effective_message.chat_id,
+            text=i18n.t("addarr.Select an instance"),
+            reply_markup=markup,
+        )
+        
+        return GIVE_INSTANCE
 
 
 async def storeTitle(update : Update, context):
@@ -425,7 +460,7 @@ async def storeTitle(update : Update, context):
 
         #check if its a single line command
         singleLineCommand = re.match(
-            rf'^{i18n.t("addarr.Find")} ({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")}) (.+)$',
+            rf'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")}) (.+)$',
             reply,
             re.IGNORECASE,
         )
@@ -436,7 +471,7 @@ async def storeTitle(update : Update, context):
             )
             # there will be a title and choice in it. extract it.
             adv_cmd = re.match(
-                rf'^{i18n.t("addarr.Find")} ((?:{i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})) (.+)$',
+                rf'^((?:{i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})) (.+)$',
                 reply,
                 re.IGNORECASE,
             )
@@ -471,47 +506,47 @@ async def storeTitle(update : Update, context):
                         ]
                     ]
                     markup = InlineKeyboardMarkup(keyboard)
-                    msg = await update.message.reply_text(i18n.t("addarr.What is this?"), reply_markup=markup)
+                    msg = await update.message.reply_text(i18n.t("addarr.What is this?"), reply_markup=markup, do_quote=True)
                     context.user_data["update_msg"] = msg.message_id
                     return READ_CHOICE
 
+        # Prompt user to select the instance
+        service_name = 'radarr' if context.user_data["choice"].lower() == i18n.t("addarr.Movie").lower() else 'sonarr'
+        instances = config[service_name]["instances"] 
+
+        if len(instances) == 1:
+            # There is only 1 instance, so use it!
+            logger.debug(f"Only found 1 instance of {service_name}, so proceeding with that one...")
+            context.user_data["instance"] = instances[0]["label"]
+            await storeInstance(update, context) # skip to next step
+            return GIVE_OPTION
+
+        keyboard = []
+        for instance in instances:
+            label = instance['label']
+            keyboard += [[
+                InlineKeyboardButton(
+                label,
+                callback_data=f"instance={label}"
+                ),
+            ]]
+
+        markup = InlineKeyboardMarkup(keyboard)
+
+        await context.bot.edit_message_text(
+            message_id=context.user_data["update_msg"],
+            chat_id=update.effective_message.chat_id,
+            text=i18n.t("addarr.Select an instance"),
+            reply_markup=markup,
+        )
         
-        await promptInstanceSelection(update, context)
         return GIVE_INSTANCE
 
 
-async def promptInstanceSelection(update : Update, context):
-    service_name = 'radarr' if context.user_data["choice"].lower() == i18n.t("addarr.Movie").lower() else 'sonarr'
-    instances = config[service_name] 
-    if len(instances) == 1:
-           # There is only 1 instance, so use it!
-           logger.debug(f"Only found 1 instance of {service_name}, so proceeding with that one...")
-           context.user_data["instance"] = instances[0]["label"]
-           return await storeInstance(update, context) # skip to next step
-    keyboard = []
-    for instance in instances:
-        label = instance['label']
-        keyboard += [[
-            InlineKeyboardButton(
-            label,
-            callback_data=f"instance={label}"
-            ),
-        ]]
-    markup = InlineKeyboardMarkup(keyboard)
-    if update.message:
-        msg = await update.message.reply_text(
-            text=i18n.t("addarr.Select an instance"),
-            reply_markup=markup
-        )
-    else:
-        msg = await update.effective_chat.send_message(
-            text=i18n.t("addarr.Select an instance"),
-            reply_markup=markup
-        )
-    context.user_data["update_msg"] = msg.message_id
-
-
-async def storeInstance(update : Update, context):
+async def storeInstance(update : Update, context: ContextTypes.DEFAULT_TYPE):
+    if update.callback_query:
+        await update.callback_query.answer()
+       
     # store selected instance and give out search results
     if update.message is not None:
         reply = update.message.text.lower()
@@ -521,23 +556,27 @@ async def storeInstance(update : Update, context):
     else:
         return MEDIA_AUTHENTICATED
     
-    if reply.startswith("instance="):
-        label = reply.replace("instance=", "", 1)
+    if not context.user_data.get("instance"):
+        if reply.startswith("instance="):
+            label = reply.replace("instance=", "", 1)
+        else:
+            label = reply
+        context.user_data["instance"] = label
     else:
-        label = reply
-    
-    context.user_data["instance"] = label
-    
+        logger.debug("Instance set from previous function")
+
+
     instance = context.user_data["instance"]
     title = context.user_data["title"]
     choice = context.user_data["choice"]
     position = context.user_data["position"] = 0
+
     service = getService(context)
     service.setInstance(instance)
-
     searchResult = service.search(title)
 
     if not searchResult:
+        logger.warning("No results found.")
         await context.bot.send_message( 
             chat_id=update.effective_message.chat_id, 
             text=i18n.t("addarr.searchresults", count=0),
@@ -613,22 +652,29 @@ async def storeInstance(update : Update, context):
                 ),
             ],
         ]
+
     markup = InlineKeyboardMarkup(keyboard)
 
-    if choice.lower() == i18n.t("addarr.Movie").lower():
+    # Send the message with the inline keyboard
+
+    if choice == i18n.t("addarr.Movie"):
         message=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr.MovieWithArticle").lower())
     else:
         message=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr.SeriesWithArticle").lower())
+   
     msg = await context.bot.send_message(
         chat_id=update.effective_message.chat_id, text=message, reply_markup=markup
     )
+    # msg = await update.message.reply_text(message, reply_markup=markup)
+
     context.user_data["title_update_msg"] = context.user_data["update_msg"]
     context.user_data["update_msg"] = msg.message_id
-
+    
     return GIVE_OPTION
 
 
 async def nextOption(update, context):
+    logger.debug('info')
     position = context.user_data["position"] + 1
     context.user_data["position"] = position
     searchResult = context.user_data["output"]
@@ -645,28 +691,28 @@ async def nextOption(update, context):
     
     if position < len(context.user_data["output"]) - 1:
         keyboard = [
-                [
-                    InlineKeyboardButton(
-                        '\U00002795 '+i18n.t("addarr.Add"),
-                        callback_data=i18n.t("addarr.Add")
-                    ),
-                ],[
-                    InlineKeyboardButton(
-                        '\U000023ED '+i18n.t("addarr.Next result"),
-                        callback_data=i18n.t("addarr.Next result")
-                    ),
-                ],[
-                    InlineKeyboardButton(
-                        '\U0001F5D1 '+i18n.t("addarr.New"),
-                        callback_data=i18n.t("addarr.New")
-                    ),
-                ],[
-                    InlineKeyboardButton(
-                        '\U0001F6D1 '+i18n.t("addarr.Stop"),
-                        callback_data=i18n.t("addarr.Stop")
-                    ),
-                ],
-            ]
+            [
+                InlineKeyboardButton(
+                    '\U00002795 '+i18n.t("addarr.Add"),
+                    callback_data=i18n.t("addarr.Add")
+                ),
+            ],[
+                InlineKeyboardButton(
+                    '\U000023ED '+i18n.t("addarr.Next result"),
+                    callback_data=i18n.t("addarr.Next result")
+                ),
+            ],[
+                InlineKeyboardButton(
+                    '\U0001F5D1 '+i18n.t("addarr.New"),
+                    callback_data=i18n.t("addarr.New")
+                ),
+            ],[
+                InlineKeyboardButton(
+                    '\U0001F6D1 '+i18n.t("addarr.Stop"),
+                    callback_data=i18n.t("addarr.Stop")
+                ),
+            ],
+        ]
     else:
         keyboard = [
             [
@@ -831,7 +877,7 @@ async def storeQualityProfile(update : Update, context):
                 f"Callback query [{update.callback_query.data.replace('Quality profile: ', '').strip()}] doesn't match any of the quality profiles. Sending quality profiles for selection..."
             )
             return storePath(update, context) # go back to previous step
-        
+  
     service = getService(context)
     service.setInstance(context.user_data["instance"])
 
@@ -1098,8 +1144,6 @@ async def help(update, context):
         )
     )
     return ConversationHandler.END
-
-
 
 
 

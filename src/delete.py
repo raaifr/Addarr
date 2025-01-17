@@ -8,7 +8,7 @@ import logger
 from commons import authentication, checkAllowed, checkId
 from config import config
 from translations import i18n
-from addarr import getService, clearUserData, stop, promptInstanceSelection
+from addarr import getService, clearUserData, stop
 
 
 # Set up logging
@@ -49,7 +49,7 @@ async def startDelete(update : Update, context):
         clearUserData(context)
     
     await context.bot.send_message(
-        chat_id=update.effective_message.chat_id, text='\U0001F3F7 '+i18n.t("addarr.Title")
+        chat_id=update.effective_message.chat_id, text='\U0001F3F7 '+ i18n.t("addarr.Title")
     )
     if not checkAllowed(update,"admin") and config.get("adminNotifyId") is not None:
         adminNotifyId = config.get("adminNotifyId")
@@ -118,7 +118,35 @@ async def storeDeleteMediaType(update : Update, context):
             context.user_data["choice"] = choice
             logger.info(f'choice: {choice}')
         
-        await promptInstanceSelection(update, context)
+        # Prompt user to select the instance
+        service_name = 'radarr' if context.user_data["choice"].lower() == i18n.t("addarr.Movie").lower() else 'sonarr'
+        instances = config[service_name]["instances"] 
+
+        if len(instances) == 1:
+            # There is only 1 instance, so use it!
+            logger.debug(f"Only found 1 instance of {service_name}, so proceeding with that one...")
+            context.user_data["instance"] = instances[0]["label"]
+            return await storeMediaInstance(update, context) # skip to next step
+
+        keyboard = []
+        for instance in instances:
+            label = instance['label']
+            keyboard += [[
+                InlineKeyboardButton(
+                label,
+                callback_data=f"instance={label}"
+                ),
+            ]]
+
+        markup = InlineKeyboardMarkup(keyboard)
+
+        await context.bot.edit_message_text(
+            message_id=context.user_data["update_msg"],
+            chat_id=update.effective_message.chat_id,
+            text=i18n.t("addarr.Select an instance"),
+            reply_markup=markup,
+        )
+        
         return GIVE_INSTANCE
 
 

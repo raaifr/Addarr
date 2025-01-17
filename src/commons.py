@@ -12,49 +12,49 @@ import sonarr as sonarr
 logLevel = logging.DEBUG if config.get("debugLogging", False) else logging.INFO
 logger = logger.getLogger("addarr.commons", logLevel, config.get("logToConsole", False))
 
-_current_label = None
+_current_instance = None
 
 # Sets the global label that can be accessed within other functions
-def setLabel(label: str):
-    global _current_label
-    _current_label = label
+def setInstanceName(label: str):
+    global _current_instance
+    _current_instance = label
 
-def getLabel() -> str:
-    global _current_label
-    return _current_label
+def getInstanceName() -> str:
+    global _current_instance
+    return _current_instance
+
+def getInstance(app):
+    instances = config[app]["instances"]
+    if _current_instance:
+        # Find the instance with the matching label
+        for instance in instances:
+            if instance["label"] == _current_instance:
+                return instance
+    else:
+        logger.warning('instance not set')
+            
 
 def generateServerAddr(app):
     try:
-        global _current_label
-        if _current_label is None:
-            logger.warning("Label is not set. Call setLabel() first.")
-            return ""
-    
-        instances = config[app]
-    
-        for instance in instances:
-            if instance["label"] == _current_label:
-                try:
-                    if instance["server"]["ssl"]:
-                        http = "https://"
-                    else:
-                        http = "http://"
-                    
-                    addr = instance["server"]["addr"]
-                    port = instance["server"]["port"]
-                    path = instance["server"]["path"]
-                    
-                    return f"{http}{addr}:{port}{path}"
-
-                except KeyError as e:
-                    logger.warning(f"Missing key {e} in configuration for {_current_label} instance.")
-                except Exception as e:
-                    logger.warning(f"Failed to generate server address for {_current_label}: {e}")
+        instance = getInstance(app)
+       
+        if instance["server"]["ssl"]:
+            http = "https://"
+        else:
+            http = "http://"
         
-        logger.warning(f"{app.capitalize()} instance with label '{_current_label}' not found.")
-
+        addr = instance["server"]["addr"]
+        port = instance["server"]["port"]
+        path = instance["server"]["path"]
+        
+        return f"{http}{addr}:{port}{path}"
+       
+    except KeyError as e:
+        logger.warning(f"Missing key {e} in configuration for {_current_instance} instance.")
+            
     except Exception as e:
-        logger.warning(f"Generate server address failed: {e}.")
+        logger.warning(f"Failed to generate server address for {_current_instance}: {e}")
+
 
 def cleanUrl(text):
     url = text.replace(" ", "%20")
@@ -63,15 +63,9 @@ def cleanUrl(text):
 
 def generateApiQuery(app, endpoint, parameters={}):
     try:
-        global _current_label
-        if _current_label is None:
-            logger.warning("Label is not set. Call setLabel() first.")
-            return ""
+        instance = getInstance(app)
         
-        instances = config[app]
-        for instance in instances:
-            if instance["label"] == _current_label:
-                apikey = instance["auth"]["apikey"]
+        apikey = instance["auth"]["apikey"]
         url = (
             generateServerAddr(app) + "api/v3/" + str(endpoint) + "?apikey=" + str(apikey)
         )
@@ -79,7 +73,10 @@ def generateApiQuery(app, endpoint, parameters={}):
         if parameters:
             for key, value in parameters.items():
                 url += "&" + key + "=" + value
+
         return cleanUrl(url)  # Clean URL (validate) and return as string
+    except KeyError as e:
+        logger.warning(f"Missing key in configuration: {e}")
     except Exception as e:
         logger.warning(f"Generate of APIQUERY failed: {e}.")
 
@@ -256,6 +253,7 @@ def getService(context):
     elif context.user_data.get("choice").lower() == i18n.t("addarr.Movie").lower():
         return radarr
     else:
+        logger.warning(f"Cannot determine service based on unknown or missing choice: {context.user_data.get('choice')}")
         raise ValueError(
             f"Cannot determine service based on unknown or missing choice: {context.user_data.get('choice')}"
         )

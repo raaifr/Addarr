@@ -13,14 +13,14 @@ from config import config
 logLevel = logging.DEBUG if config.get("debugLogging", False) else logging.INFO
 logger = logger.getLogger("addarr.radarr", logLevel, config.get("logToConsole", False))
 
-radarr_config = config["radarr"][0]
+radarr_config = config["radarr"] if isinstance(config["radarr"]["instances"], list) else [config["radarr"]["instances"]]
 
 addMovieNeededFields = ["tmdbId", "year", "title", "titleSlug", "images"]
 
 def setInstance(label):
     global radarr_config
-    radarr_instances = config['radarr']
-    commons.setLabel(label)
+    radarr_instances = config['radarr']['instances']
+    commons.setInstanceName(label)
 
     for instance in radarr_instances:
         if instance["label"] == label:
