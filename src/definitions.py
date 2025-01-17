@@ -19,10 +19,10 @@ DEFAULT_SETTINGS = {
     "entrypointAdd": "start", #start or a custom entrypoint
     "entrypointDelete": "delete", #start or a custom entrypoint
     "entrypointAllSeries": "allSeries", #allSeries or a custom entrypoint
-    "entrypointAllMovies": "allMovies", #allSeries or a custom entrypoint
+    "entrypointAllMovies": "allMovies", #allMovies or a custom entrypoint
     "entrypointTransmission": "transmission", #transmission or a custom entrypoint
     "entrypointSabnzbd": "sabnzbd", #sabnzbd or a custom entrypoint
-    "entrypointqBittorrent": "qbittorrent", #sabnzbd or a custom entrypoint
+    "entrypointqBittorrent": "qbittorrent", #qbittorrent or a custom entrypoint
     "logToConsole": True,
     "debugLogging": False,
     "language": "en-us",

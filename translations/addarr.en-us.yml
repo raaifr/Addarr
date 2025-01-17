@@ -27,6 +27,7 @@ en-us:
   Deselect all seasons: Deselect all seasons
   Authorize: You first need to authorize this chat. What is the password?
   Wrong password: You entered the wrong password. Try again...
+  Loading All: This may take a few mins depending on your library. Please wait . . . 
   Chatid added: "This chat is successfully added to the list of allowed chats. Now you can start using this bot. \nIf you entered a command, you need to execute it again."
   NotAdmin: "You need to be an admin to execute this command."
   Chatid already allowed: "This chat is already authorized."
