@@ -149,34 +149,45 @@ def main():
     addMedia_handler = ConversationHandler(
         entry_points=[
             CommandHandler(config["entrypointAdd"], startNewMedia),
+            CommandHandler(i18n.t('addarr.Series'), startNewMedia),
+            CommandHandler(i18n.t('addarr.Movie'), startNewMedia),
             MessageHandler(
                 filters.Regex(
-                    re.compile(rf"(?i)^{config['entrypointAdd']}$", re.IGNORECASE)
+                    re.compile(rf"^{config['entrypointAdd']}$", re.IGNORECASE)
                 ),
                 startNewMedia,
             ),
             MessageHandler(
                 filters.Regex(
-                    re.compile(rf"(?i)^{i18n.t('addarr.Movie')}$", re.IGNORECASE)
+                    re.compile(rf"^{i18n.t('addarr.Movie')}$", re.IGNORECASE)
                 ),
                 startNewMedia,
             ),
              MessageHandler(
                 filters.Regex(
-                    re.compile(rf"(?i)^{i18n.t('addarr.Series')}$", re.IGNORECASE)
+                    re.compile(rf"^{i18n.t('addarr.Series')}$", re.IGNORECASE)
                 ),
                 startNewMedia,
             ),
             MessageHandler(
                 filters.Regex(
                     re.compile(
-                        rf"(?i)^((?:{i18n.t('addarr.Movie')}|{i18n.t('addarr.Series')})) (.+)$",
+                        rf"^((?:{i18n.t('addarr.Movie')}|{i18n.t('addarr.Series')})) (.+)$",
                         re.IGNORECASE
                     )
                 ),
                 storeTitle,
             ),
-            
+            # CommandHandler(
+            #     command=i18n.t('addarr.Movie'),
+            #     callback=storeTitle,
+            #     filters=filters.Regex(
+            #         re.compile(
+            #             rf"^/({i18n.t('addarr.Movie')})\s+(.+)$",
+            #             re.IGNORECASE
+            #         )
+            #     ),
+            # ),
         ],
         states={
             MEDIA_AUTHENTICATED: [
@@ -372,19 +383,128 @@ async def startNewMedia(update : Update, context: ContextTypes.DEFAULT_TYPE):
         reply = update.callback_query.data.lower()
     else:
         return MEDIA_AUTHENTICATED
+
     
-    logger.debug(f'user has sent: {reply}')
+    if i18n.t("addarr.Movie").lower() in reply.lower():
+        logger.debug(
+            f"User issued {reply} command, so processing for Movie."
+        )
+        # Check if the reply contains only "Movie" (ignoring case and a leading "/")
+        cleaned_reply = reply.lstrip("/").strip().lower()
+        if cleaned_reply == i18n.t("addarr.Movie").lower():
+            context.user_data["choice"] = i18n.t("addarr.Movie")
+        else:
+            # Separate "Movie" from the rest of the words
+            remaining_text = cleaned_reply.replace(i18n.t("addarr.Movie").lower(), "").strip()
+            context.user_data["choice"] = i18n.t("addarr.Movie")
+            context.user_data["title"] = remaining_text
+            logger.debug(f"Command: Movie, Title: {remaining_text}")
+            
+            # Prompt user to select the instance
+            service_name = 'radarr' if context.user_data["choice"].lower() == i18n.t("addarr.Movie").lower() else 'sonarr'
+            instances = config[service_name]["instances"] 
     
+            if len(instances) == 1:
+                # There is only 1 instance, so use it!
+                logger.debug(f"Only found 1 instance of {service_name}, so proceeding with that one...")
+                context.user_data["instance"] = instances[0]["label"]
+                await storeInstance(update, context) # skip to next step
+                return GIVE_OPTION
+    
+            keyboard = []
+            for instance in instances:
+                label = instance['label']
+                keyboard += [[
+                    InlineKeyboardButton(
+                    label,
+                    callback_data=f"instance={label}"
+                    ),
+                ]]
+    
+            markup = InlineKeyboardMarkup(keyboard)
+
+            if not config.get("update_msg"):
+                await context.bot.send_message(
+                    chat_id=update.effective_message.chat_id, 
+                    text=i18n.t("addarr.Select an instance"),
+                    reply_markup=markup,
+                )
+            else: 
+                await context.bot.edit_message_text(
+                    message_id=context.user_data["update_msg"],
+                    chat_id=update.effective_message.chat_id,
+                    text=i18n.t("addarr.Select an instance"),
+                    reply_markup=markup,
+                )
+            
+            return GIVE_INSTANCE
+
+
+    elif i18n.t("addarr.Series").lower() in reply.lower():
+        logger.debug(
+            f"User issued {reply} command, so processing for Series."
+        )
+        # Check if the reply contains only "Series" (ignoring case and a leading "/")
+        cleaned_reply = reply.lstrip("/").strip().lower()
+        if cleaned_reply == i18n.t("addarr.Series").lower():
+            context.user_data["choice"] = i18n.t("addarr.Series")
+        else:
+            # Separate "Series" from the rest of the words
+            remaining_text = cleaned_reply.replace(i18n.t("addarr.Series").lower(), "").strip()
+            context.user_data["choice"] = i18n.t("addarr.Series")
+            context.user_data["title"] = remaining_text
+            logger.debug(f"Command: Series, Title: {remaining_text}")
+            
+            # Prompt user to select the instance
+            service_name = 'radarr' if context.user_data["choice"].lower() == i18n.t("addarr.Movie").lower() else 'sonarr'
+            instances = config[service_name]["instances"] 
+
+            if len(instances) == 1:
+                # There is only 1 instance, so use it!
+                logger.debug(f"Only found 1 instance of {service_name}, so proceeding with that one...")
+                context.user_data["instance"] = instances[0]["label"]
+                await storeInstance(update, context) # skip to next step
+                return GIVE_OPTION
+
+            keyboard = []
+            for instance in instances:
+                label = instance['label']
+                keyboard += [[
+                    InlineKeyboardButton(
+                    label,
+                    callback_data=f"instance={label}"
+                    ),
+                ]]
+
+            markup = InlineKeyboardMarkup(keyboard)
+
+            await context.bot.edit_message_text(
+                message_id=context.user_data["update_msg"],
+                chat_id=update.effective_message.chat_id,
+                text=i18n.t("addarr.Select an instance"),
+                reply_markup=markup,
+            )
+
+            return GIVE_INSTANCE
+
+    elif reply.lower() == i18n.t("addarr.New").lower():
+        logger.debug("User issued New command, so clearing user_data")
+        clearUserData(context)
+
+
+
     if i18n.t("addarr.Movie").lower() in reply:
         logger.debug(
             f"User issued {reply} command, so setting user_data[choice] accordingly"
         )
         context.user_data["choice"] = i18n.t("addarr.Movie")
+
     elif i18n.t("addarr.Series").lower() in reply:
         logger.debug(
             f"User issued {reply} command, so setting user_data[choice] accordingly"
         )
         context.user_data["choice"] = i18n.t("addarr.Series")
+
     elif reply.lower() == i18n.t("addarr.New").lower():
         logger.debug("User issued New command, so clearing user_data")
         clearUserData(context)
