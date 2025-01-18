@@ -183,16 +183,6 @@ def main():
                 ),
                 storeTitle,
             ),
-            # CommandHandler(
-            #     command=i18n.t('addarr.Movie'),
-            #     callback=storeTitle,
-            #     filters=filters.Regex(
-            #         re.compile(
-            #             rf"^/({i18n.t('addarr.Movie')})\s+(.+)$",
-            #             re.IGNORECASE
-            #         )
-            #     ),
-            # ),
         ],
         states={
             MEDIA_AUTHENTICATED: [
@@ -216,11 +206,16 @@ def main():
             ],
             GIVE_OPTION: [
                 CallbackQueryHandler(storeSelection, pattern=f'(?i)^({i18n.t("addarr.Add")})$'),
+                CallbackQueryHandler(prevOption, pattern=f'(?i)^({i18n.t("addarr.Previous result")})$'),
                 CallbackQueryHandler(nextOption, pattern=f'(?i)^({i18n.t("addarr.Next result")})$'),
                 CallbackQueryHandler(startNewMedia, pattern=f'(?i)^({i18n.t("addarr.New")})$'),
                 MessageHandler(
                     filters.Regex(f'(?i)^({i18n.t("addarr.Add")})$'),
                     storeSelection
+                ),
+                MessageHandler(
+                    filters.Regex(f'(?i)^({i18n.t("addarr.Previous result")})$'),
+                    prevOption
                 ),
                 MessageHandler(
                     filters.Regex(f'(?i)^({i18n.t("addarr.Next result")})$'),
@@ -337,7 +332,6 @@ def main():
     application.add_handler(listAllMediaHandler)
     application.add_handler(addMedia_handler)
     application.add_handler(deleteMedia_handler)
-
 
     help_handler_command = CommandHandler(config["entrypointHelp"], help)
     application.add_handler(help_handler_command)
@@ -750,49 +744,48 @@ async def storeInstance(update : Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         context.user_data["photo_update_msg"] = img.message_id
     
-    if len(searchResult) == 1:
-        keyboard = [
-            [
-                InlineKeyboardButton(
-                    '\U00002795 '+i18n.t("addarr.Add"),
-                    callback_data=i18n.t("addarr.Add")
-                ),
-            ],[
-                InlineKeyboardButton(
-                    '\U0001F5D1 '+i18n.t("addarr.New"),
-                    callback_data=i18n.t("addarr.New")
-                ),
-            ],[
-                InlineKeyboardButton(
-                    '\U0001F6D1 '+i18n.t("addarr.Stop"),
-                    callback_data=i18n.t("addarr.Stop")
-                ),
-            ],
-        ]
-    else: 
-        keyboard = [
-            [
-                InlineKeyboardButton(
-                    '\U00002795 '+i18n.t("addarr.Add"),
-                    callback_data=i18n.t("addarr.Add")
-                ),
-            ],[
-                InlineKeyboardButton(
-                    '\U000023ED '+i18n.t("addarr.Next result"),
-                    callback_data=i18n.t("addarr.Next result")
-                ),
-            ],[
-                InlineKeyboardButton(
-                    '\U0001F5D1 '+i18n.t("addarr.New"),
-                    callback_data=i18n.t("addarr.New")
-                ),
-            ],[
-                InlineKeyboardButton(
-                    '\U0001F6D1 '+i18n.t("addarr.Stop"),
-                    callback_data=i18n.t("addarr.Stop")
-                ),
-            ],
-        ]
+    
+    keyboard = [
+        [
+            InlineKeyboardButton(
+                '\U00002795 ' + i18n.t("addarr.Add"),
+                callback_data=i18n.t("addarr.Add")
+            ),
+        ],
+    ]
+
+    # Row for Prev and Next buttons
+    prev_next_row = []
+    if position > 0:
+        prev_next_row.append(
+            InlineKeyboardButton(
+                '\U000023EE ' + i18n.t("addarr.Previous result"),
+                callback_data=i18n.t("addarr.Previous result")
+            )
+        )
+    if position < len(context.user_data["output"]) - 1:
+        prev_next_row.append(
+            InlineKeyboardButton(
+                '\U000023ED ' + i18n.t("addarr.Next result"),
+                callback_data=i18n.t("addarr.Next result")
+            )
+        )
+
+    # Add Prev/Next row only if it has buttons
+    if prev_next_row:
+        keyboard.append(prev_next_row)
+
+    # Row for New and Stop buttons
+    keyboard.append([
+        InlineKeyboardButton(
+            '\U0001F5D1 ' + i18n.t("addarr.New"),
+            callback_data=i18n.t("addarr.New")
+        ),
+        InlineKeyboardButton(
+            '\U0001F6D1 ' + i18n.t("addarr.Stop"),
+            callback_data=i18n.t("addarr.Stop")
+        ),
+    ])
 
     markup = InlineKeyboardMarkup(keyboard)
 
@@ -815,13 +808,105 @@ async def storeInstance(update : Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def nextOption(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    position = context.user_data["position"] + 1
+    position = min(context.user_data["position"] + 1, len(context.user_data["output"]) - 1)
     context.user_data["position"] = position
     searchResult = context.user_data["output"]
     choice = context.user_data["choice"]    
 
     message=i18n.t("addarr.searchresults", count=len(searchResult))
     message += f"\n\n*{context.user_data['output'][position]['title']} ({context.user_data['output'][position]['year']})*"
+
+    await context.bot.edit_message_text(
+        message_id=context.user_data["title_update_msg"],
+        chat_id=update.effective_message.chat_id,
+        text=message,
+        parse_mode=ParseMode.MARKDOWN,
+    )
+
+    keyboard = [
+        [
+            InlineKeyboardButton(
+                '\U00002795 ' + i18n.t("addarr.Add"),
+                callback_data=i18n.t("addarr.Add")
+            ),
+        ],
+    ]
+
+    # Row for Prev and Next buttons
+    prev_next_row = []
+    if position > 0:
+        prev_next_row.append(
+            InlineKeyboardButton(
+                '\U000023EE ' + i18n.t("addarr.Previous result"),
+                callback_data=i18n.t("addarr.Previous result")
+            )
+        )
+    if position < len(context.user_data["output"]) - 1:
+        prev_next_row.append(
+            InlineKeyboardButton(
+                '\U000023ED ' + i18n.t("addarr.Next result"),
+                callback_data=i18n.t("addarr.Next result")
+            )
+        )
+
+    # Add Prev/Next row only if it has buttons
+    if prev_next_row:
+        keyboard.append(prev_next_row)
+
+    # Row for New and Stop buttons
+    keyboard.append([
+        InlineKeyboardButton(
+            '\U0001F5D1 ' + i18n.t("addarr.New"),
+            callback_data=i18n.t("addarr.New")
+        ),
+        InlineKeyboardButton(
+            '\U0001F6D1 ' + i18n.t("addarr.Stop"),
+            callback_data=i18n.t("addarr.Stop")
+        ),
+    ])
+
+    markup = InlineKeyboardMarkup(keyboard)
+
+    if context.user_data["photo_update_msg"]:
+        await context.bot.delete_message(
+            message_id=context.user_data["photo_update_msg"],
+            chat_id=update.effective_message.chat_id,
+        )
+    
+    try:
+        img = await context.bot.sendPhoto(
+            chat_id=update.effective_message.chat_id,
+            photo=context.user_data["output"][position]["poster"],
+        )
+    except:
+        context.user_data["photo_update_msg"] = None
+    else:
+        context.user_data["photo_update_msg"] = img.message_id
+    
+    await context.bot.delete_message(
+        message_id=context.user_data["update_msg"],
+        chat_id=update.effective_message.chat_id,
+    )
+    if choice.lower() == i18n.t("addarr.Movie").lower():
+        message=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr.MovieWithArticle").lower())
+    else:
+        message=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr.SeriesWithArticle").lower())
+    msg = await context.bot.send_message(
+        chat_id=update.effective_message.chat_id, text=message, reply_markup=markup
+    )
+    context.user_data["update_msg"] = msg.message_id
+    return GIVE_OPTION
+
+
+async def prevOption(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    position = max(context.user_data["position"] - 1, 0)
+    context.user_data["position"] = position
+    searchResult = context.user_data["output"]
+    choice = context.user_data["choice"]    
+
+    message=i18n.t("addarr.searchresults", count=len(searchResult))
+    message += f"\n\n*{context.user_data['output'][position]['title']} ({context.user_data['output'][position]['year']})*"
+    
     await context.bot.edit_message_text(
         message_id=context.user_data["title_update_msg"],
         chat_id=update.effective_message.chat_id,
@@ -829,49 +914,48 @@ async def nextOption(update: Update, context: ContextTypes.DEFAULT_TYPE):
         parse_mode=ParseMode.MARKDOWN,
     )
     
+    keyboard = [
+        [
+            InlineKeyboardButton(
+                '\U00002795 ' + i18n.t("addarr.Add"),
+                callback_data=i18n.t("addarr.Add")
+            ),
+        ],
+    ]
+
+    # Row for Prev and Next buttons
+    prev_next_row = []
+    if position > 0:
+        prev_next_row.append(
+            InlineKeyboardButton(
+                '\U000023EE ' + i18n.t("addarr.Previous result"),
+                callback_data=i18n.t("addarr.Previous result")
+            )
+        )
     if position < len(context.user_data["output"]) - 1:
-        keyboard = [
-            [
-                InlineKeyboardButton(
-                    '\U00002795 '+i18n.t("addarr.Add"),
-                    callback_data=i18n.t("addarr.Add")
-                ),
-            ],[
-                InlineKeyboardButton(
-                    '\U000023ED '+i18n.t("addarr.Next result"),
-                    callback_data=i18n.t("addarr.Next result")
-                ),
-            ],[
-                InlineKeyboardButton(
-                    '\U0001F5D1 '+i18n.t("addarr.New"),
-                    callback_data=i18n.t("addarr.New")
-                ),
-            ],[
-                InlineKeyboardButton(
-                    '\U0001F6D1 '+i18n.t("addarr.Stop"),
-                    callback_data=i18n.t("addarr.Stop")
-                ),
-            ],
-        ]
-    else:
-        keyboard = [
-            [
-                InlineKeyboardButton(
-                    '\U00002795 '+i18n.t("addarr.Add"),
-                    callback_data=i18n.t("addarr.Add")
-                ),
-            ],[
-                InlineKeyboardButton(
-                    '\U0001F5D1 '+i18n.t("addarr.New"),
-                    callback_data=i18n.t("addarr.New")
-                ),
-            ],[
-                InlineKeyboardButton(
-                    '\U0001F6D1 '+i18n.t("addarr.Stop"),
-                    callback_data=i18n.t("addarr.Stop")
-                ),
-            ],
-        ]
+        prev_next_row.append(
+            InlineKeyboardButton(
+                '\U000023ED ' + i18n.t("addarr.Next result"),
+                callback_data=i18n.t("addarr.Next result")
+            )
+        )
+
+    # Add Prev/Next row only if it has buttons
+    if prev_next_row:
+        keyboard.append(prev_next_row)
+
+    # Row for New and Stop buttons
+    keyboard.append([
+        InlineKeyboardButton(
+            '\U0001F5D1 ' + i18n.t("addarr.New"),
+            callback_data=i18n.t("addarr.New")
+        ),
+        InlineKeyboardButton(
+            '\U0001F6D1 ' + i18n.t("addarr.Stop"),
+            callback_data=i18n.t("addarr.Stop")
+        ),
+    ])
+
     markup = InlineKeyboardMarkup(keyboard)
 
     if context.user_data["photo_update_msg"]:
