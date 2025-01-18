@@ -1,14 +1,13 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.constants import ParseMode
-from telegram.ext import ConversationHandler
+from telegram.ext import ConversationHandler, ContextTypes
 
 import logging
 import logger
 
-from commons import authentication, checkAllowed, checkId
+from commons import authentication, checkAllowed, checkId, getService, clearUserData
 from config import config
 from translations import i18n
-from addarr import getService, clearUserData, stop
 
 
 # Set up logging
@@ -17,7 +16,7 @@ logger = logger.getLogger("addarr.radarr", logLevel, config.get("logToConsole", 
 
 MEDIA_DELETE_AUTHENTICATED, GIVE_INSTANCE, MEDIA_DELETE_TYPE, DELETE_CONFIRM = range(4)
 
-async def startDelete(update : Update, context):
+async def startDelete(update : Update, context: ContextTypes.DEFAULT_TYPE):
     # since we need to determine what instance of sonnar/radarr we will be using, the check for admistRestrictions will come after instance has been selected
     if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
         #When using this mode, bot will remain silent if user is not in the allowlist.txt
@@ -59,19 +58,40 @@ async def startDelete(update : Update, context):
     )
     return MEDIA_DELETE_AUTHENTICATED
 
-async def storeDeleteTitle(update : Update, context):
+async def storeDeleteTitle(update : Update, context: ContextTypes.DEFAULT_TYPE):
     if not checkId(update):
         if (
             authentication(update, context) == "added"
         ):  # To also stop the beginning command
             return ConversationHandler.END
     elif update.message.text.lower() == "/stop".lower() or update.message.text.lower() == "stop".lower():
-        return stop(update, context)
+        if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
+            #When using this mode, bot will remain silent if user is not in the allowlist.txt
+            logger.info("Allowlist is enabled, but userID isn't added into 'allowlist.txt'. So bot stays silent")
+            return ConversationHandler.END
+
+        if not checkId(update):
+            await context.bot.send_message(
+                chat_id=update.effective_message.chat_id, text=i18n.t("addarr.Authorize")
+            )
+            return MEDIA_DELETE_AUTHENTICATED
+
+        if not checkAllowed(update,"admin") and config.get("adminNotifyId") is not None:
+            adminNotifyId = config.get("adminNotifyId")
+            await context.bot.send_message(
+                chat_id=adminNotifyId, text=i18n.t("addarr.Notifications.Stop", first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
+            )
+        clearUserData(context)
+        await context.bot.send_message(
+            chat_id=update.effective_message.chat_id, text=i18n.t("addarr.End")
+        )
+        return ConversationHandler.END
+    
     else:
         if update.message is not None:
             reply = update.message.text.lower()
         elif update.callback_query is not None:
-            reply = update.callback_query.data
+            reply = update.callback_query.data.lower()
         else:
             return MEDIA_DELETE_AUTHENTICATED
         
@@ -102,7 +122,7 @@ async def storeDeleteTitle(update : Update, context):
             return MEDIA_DELETE_TYPE
 
         
-async def storeDeleteMediaType(update : Update, context):
+async def storeDeleteMediaType(update : Update, context: ContextTypes.DEFAULT_TYPE):
     if not checkId(update):
         if (
             authentication(update, context) == "added"
@@ -126,7 +146,8 @@ async def storeDeleteMediaType(update : Update, context):
             # There is only 1 instance, so use it!
             logger.debug(f"Only found 1 instance of {service_name}, so proceeding with that one...")
             context.user_data["instance"] = instances[0]["label"]
-            return await storeMediaInstance(update, context) # skip to next step
+            await storeMediaInstance(update, context) # skip to next step
+            return DELETE_CONFIRM
 
         keyboard = []
         for instance in instances:
@@ -150,7 +171,7 @@ async def storeDeleteMediaType(update : Update, context):
         return GIVE_INSTANCE
 
 
-async def storeMediaInstance(update, context):
+async def storeMediaInstance(update : Update, context: ContextTypes.DEFAULT_TYPE):
     if update.message is not None:
         reply = update.message.text.lower()
         logger.debug(f"reply is {reply}")
@@ -159,12 +180,14 @@ async def storeMediaInstance(update, context):
     else:
         return MEDIA_DELETE_AUTHENTICATED
     
-    if reply.startswith("instance="):
-        label = reply.replace("instance=", "", 1)
+    if not context.user_data.get("instance"):
+        if reply.startswith("instance="):
+            label = reply.replace("instance=", "", 1)
+        else:
+            label = reply
+        context.user_data["instance"] = label
     else:
-        label = reply
-    
-    context.user_data["instance"] = label
+        logger.debug("Instance set from previous function")
     
     instance = context.user_data["instance"]
     title = context.user_data["title"]
@@ -206,7 +229,7 @@ async def storeMediaInstance(update, context):
                 ],[
                     InlineKeyboardButton(
                         '\U000023ED '+i18n.t("addarr.StopDelete"),
-                        callback_data=i18n.t("addarr.Stop")
+                        callback_data=i18n.t("addarr.StopDelete")
                     ),
                 ],[ 
                     InlineKeyboardButton(

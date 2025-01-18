@@ -127,6 +127,11 @@ def main():
             delete.GIVE_INSTANCE: [CallbackQueryHandler(delete.storeMediaInstance, pattern=r"^instance=(.+)")],
             
             delete.DELETE_CONFIRM:[
+                CallbackQueryHandler(stop, pattern=f'({i18n.t("addarr.StopDelete")})'),
+                MessageHandler(
+                    filters.Regex(f'^({i18n.t("addarr.StopDelete")})$'),
+                    stop
+                ),
                 CallbackQueryHandler(delete.deleteMedia, pattern=f'({i18n.t("addarr.Delete")})'),
                 MessageHandler(
                     filters.Regex(f'^({i18n.t("addarr.Delete")})$'),
@@ -134,9 +139,9 @@ def main():
                 ),
                 MessageHandler(
                     filters.Regex(f'^({i18n.t("addarr.New")})$'),
-                    delete.deleteMedia
+                    delete.startDelete
                 ),
-                CallbackQueryHandler(delete.deleteMedia, pattern=f'({i18n.t("addarr.New")})'),  
+                CallbackQueryHandler(delete.startDelete, pattern=f'({i18n.t("addarr.New")})'),  
             ],
         },
         fallbacks=[
@@ -635,7 +640,7 @@ async def storeTitle(update : Update, context: ContextTypes.DEFAULT_TYPE):
                         ]
                     ]
                     markup = InlineKeyboardMarkup(keyboard)
-                    msg = await update.message.reply_text(i18n.t("addarr.What is this?"), reply_markup=markup, do_quote=True)
+                    msg = await update.message.reply_text(i18n.t("addarr.What is this?"), reply_markup=markup)
                     context.user_data["update_msg"] = msg.message_id
                     return GIVE_MEDIA_TYPE
 
@@ -662,12 +667,19 @@ async def storeTitle(update : Update, context: ContextTypes.DEFAULT_TYPE):
 
         markup = InlineKeyboardMarkup(keyboard)
 
-        await context.bot.edit_message_text(
-            message_id=context.user_data["update_msg"],
-            chat_id=update.effective_message.chat_id,
-            text=i18n.t("addarr.Select an instance"),
-            reply_markup=markup,
-        )
+        if not context.user_data.get("update_msg"):
+            await context.bot.send_message(
+                chat_id=update.effective_message.chat_id, 
+                text=i18n.t("addarr.Select an instance"),
+                reply_markup=markup,
+            )
+        else:
+            await context.bot.edit_message_text(
+                message_id=context.user_data["update_msg"],
+                chat_id=update.effective_message.chat_id,
+                text=i18n.t("addarr.Select an instance"),
+                reply_markup=markup,
+            )
         
         return GIVE_INSTANCE
 
