@@ -1035,7 +1035,7 @@ async def storeSelection(update : Update, context: ContextTypes.DEFAULT_TYPE):
     return GIVE_PATHS
 
 
-async def storePath(update : Update, context):
+async def storePath(update : Update, context: ContextTypes.DEFAULT_TYPE):
     # store selected root folder and prompt to select quality profiles
     if not context.user_data.get("path"):
         # Path selection should be in the update message
@@ -1086,7 +1086,7 @@ async def storePath(update : Update, context):
     return GIVE_QUALITY_PROFILES
 
 
-async def storeQualityProfile(update : Update, context):
+async def storeQualityProfile(update : Update, context: ContextTypes.DEFAULT_TYPE):
     # store quality profile selection and save the movie. 
     if not context.user_data.get("qualityProfile"):
         # Quality selection should be in the update message
@@ -1141,7 +1141,7 @@ async def storeQualityProfile(update : Update, context):
     return SELECT_SEASONS
 
 
-async def storeSeasons(update, context):
+async def storeSeasons(update : Update, context: ContextTypes.DEFAULT_TYPE):
     choice = context.user_data["choice"]
     seasons = context.user_data["seasons"]
     selectedSeasons = []
@@ -1219,7 +1219,7 @@ async def storeSeasons(update, context):
             return await storeSeasons(update, context) 
 
 
-async def addMedia(update, context):
+async def addMedia(update : Update, context: ContextTypes.DEFAULT_TYPE):
     position = context.user_data["position"]
     choice = context.user_data["choice"]
     idnumber = context.user_data["output"][position]["id"]
@@ -1249,11 +1249,13 @@ async def addMedia(update, context):
     # Process the tags that will be added
     tags = []
     service_Config = service.getInstance()
+
+    #create tag that will be used: userid
     
     if service_Config.get("addRequesterIdTag"):
         userTag = str(update.effective_message.chat.id)
         if service.tagExists(userTag) != -1:
-            tags = [userTag]
+            tags = [service.tagExists(userTag)]
             logger.debug(f'The tag {userTag} already exists. Using existing tag for user')
         else:
             logger.debug(f'The tag {userTag} does not exists. Creating new tag for user')
@@ -1265,6 +1267,7 @@ async def addMedia(update, context):
                 logger.debug(f'Create user tag FAILED in {instace_name}: {userTag}')
     else:
         logger.debug("tagging not included")
+
     if not tags:
         logger.debug(f'Adding default tags')
         default_tags = service_Config.get("defaultTags", [])
@@ -1345,7 +1348,7 @@ async def addMedia(update, context):
         return ConversationHandler.END
 
 
-async def help(update, context):
+async def help(update : Update, context: ContextTypes.DEFAULT_TYPE):
     if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
         #When using this mode, bot will remain silent if user is not in the allowlist.txt
         logger.info("Allowlist is enabled, but userID isn't added into 'allowlist.txt'. So bot stays silent")
