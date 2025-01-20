@@ -1425,12 +1425,12 @@ async def help(update : Update, context: ContextTypes.DEFAULT_TYPE):
             delete=config["entrypointDelete"],
             movie=i18n.t("addarr.Movie").lower(),
             serie=i18n.t("addarr.Series").lower(),
-            find=i18n.t("addarr.Find").lower(),
             allSeries=config["entrypointAllSeries"],
             allMovies=config["entrypointAllMovies"],
             transmission=config["entrypointTransmission"],
             sabnzbd=config["entrypointSabnzbd"],
             qbittorrent=config["entrypointqBittorrent"],
+            notify=config["entrypointNotify"],
         )
     )
     return ConversationHandler.END

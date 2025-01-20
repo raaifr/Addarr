@@ -9,10 +9,11 @@ This is a Telegram Bot made to add series to [Sonarr](https://github.com/Sonarr/
 - Add series/movies to Sonarr/Radarr
 - Multiple instances of Sonarr/Radarr supported
 - Get a list of all the series on Sonarr
-- Change down-/uploadspeed of Transmission (Temporary Speed Limit)
+- Notifications to each user from sonarr/radarr when media that user added has been downloaded
+- Change download/uploadspeed of Transmission/Sabnzbd/qBittorrent (Temporary Speed Limit)
 - Secure bot with a password. New chats first need to authenticate
 - Wrong login attempts are saved in `addarr.log`
-- Possibility to enable the Transmission-command only for admins
+- Possibility to enable the Transmission/Sabnzbd/qBittorrent-command only for admins
 - Possibility to change the entrypoints of the commands
 - Translated in English (US), Dutch (Belgium), Spanish (Spain), Italian (Italy), Portuguese (Portugal), Polish (Poland), German (Germany) and French (France)
 - Command to give an overview of all the other commands
@@ -26,10 +27,12 @@ These are the default commands:
 
 - `/help`: gives an overview of all the commands with their action
 - `/auth`: authenticate the chat to use this bot
+- `/notify`: this create notification profiles for telegram in radarr/sonarr. Users will then be notified when the media they added has been downloaded
 - `/start`: start adding a series or movie to Sonarr/Radarr
 - `/delete`: remove a series or movie from Sonarr/Radarr
 - `/movie` (en-us) - `/film` (nl-be, it-it, de-de, fr-fr) - `/file` (pt-pt) - `/Película` (es-es): start adding a movie to Radarr
 - `/series` (en-us) - `/serie` (nl-be, it-it, pt-pt, es-es, de-de, fr-fr) : start adding a series to Sonarr
+    You can also pass the title after the command: `/movie dory`
 - `/allSeries`: receive a list of all the series on Sonarr
 - `/allMovies`: receive a list of all the movies on Radarr
 - `/transmission`: change the download/upload speed of Transmission from Temporary Speed Limit to normal or the other way around
@@ -43,8 +46,7 @@ Every command does also work if you send a message without `/` and no other word
 
 Single line commands allow you to skip multiple steps of the process
 
-- `Find {movie | series} {title}`: will bring you directly to Title selection step. If you have multiple instances of Sonarr/Radarr setup, you will need to select to which instance you want to add the title to. For example if you want to find the title "Wrong Turn" you would type `Find movie Wrong Turn` or to find a tv show `Find series iZombie`
-
+- `{movie | series} {title}`: will bring you directly to Title selection step. If you have multiple instances of Sonarr/Radarr setup, you will need to select to which instance you want to add the title to. For example if you want to find the title "Wrong Turn" you would type `movie Wrong Turn` or to find a tv show `series iZombie`
 
 ## CONFIG
 
