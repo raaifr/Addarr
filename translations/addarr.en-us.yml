@@ -32,6 +32,9 @@ en-us:
   Chatid added: "This chat is successfully added to the list of allowed chats. Now you can start using this bot. \nIf you entered a command, you need to execute it again."
   NotAdmin: "You need to be an admin to execute this command."
   Chatid already allowed: "This chat is already authorized."
+  Notification enabled: "Notification profiles created. You will receive notifications when the media you add is downloaded."
+  Notification already added: "You are already subscribed to notifications"
+  Creating Notifications: "The notification subscriptions will now be created. You may receive some test notifications."
   Help: "Want to see this text again? Use /%{help}.
     \n• To authenticate before first use you should use /%{authenticate}.
     \n• To add a movie or series use /%{add}.

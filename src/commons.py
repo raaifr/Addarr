@@ -4,7 +4,7 @@ import os
 from telegram.ext import ConversationHandler
 import logger
 from config import config
-from definitions import ADMIN_PATH, CHATID_PATH, ALLOWLIST_PATH
+from definitions import ADMIN_PATH, CHATID_PATH, ALLOWLIST_PATH, NOTIFICATIONLIST_PATH
 from translations import i18n
 import radarr as radarr
 import sonarr as sonarr
@@ -99,18 +99,15 @@ def generateApiQuery(app, endpoint, parameters={}):
 def checkId(update):
     authorize = False
     
-    # Check if the file exists; if not, create it
     if not os.path.exists(CHATID_PATH):
         with open(CHATID_PATH, "w") as file:
             pass  # Create an empty file
     
-    # Check if the file is empty
     with open(CHATID_PATH, "r") as file:
         firstChar = file.read(1)
         if not firstChar:  # File is empty
             return False
 
-    # If the file is not empty, check for the chat ID
     with open(CHATID_PATH, "r") as file:
         for line in file:
             chatId = line.strip("\n").split(" - ")[0]
@@ -119,6 +116,44 @@ def checkId(update):
 
     return authorize
 
+# Check if user has subscribed to notifications
+async def checkNotificationSubscribed(chatid):
+    onInstance = False
+    radarr_instances = config['radarr']['instances']
+    sonarr_instances = config['sonarr']['instances']
+
+    for instance in radarr_instances:
+        radarr.setInstance(instance["label"])
+        setInstanceName(instance["label"])
+        onInstance = radarr.notificationProfileExist(chatid)
+        
+    for instance in sonarr_instances:
+        sonarr.setInstance(instance["label"])
+        setInstanceName(instance["label"])
+        onInstance = sonarr.notificationProfileExist(chatid)
+
+    return onInstance
+
+async def generateProfileName(context, chatid):
+    chat = await context.bot.get_chat(chatid)
+    if chat.username:
+        chatName = str(chat.username)
+    elif chat.title:
+        chatName = str(chat.title)
+    elif chat.last_name and chat.first_name:
+        chatName = str(chat.last_name) + str(chat.first_name)
+    elif chat.first_name:
+        chatName = str(chat.first_name)
+    elif chat.last_name:
+        chatName = str(chat.last_name)
+    else:
+        chatName = None
+
+    if chatName is not None:
+        return f"{str(chatid)} ({chatName})"
+    else:
+        return str(chatid)
+    
 
 async def authentication(update, context):
     if config.get("enableAllowlist") and not checkAllowed(update,"regular"):

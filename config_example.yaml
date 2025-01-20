@@ -5,7 +5,7 @@ sonarr:
       server:
         addr: 
         port: 8989 # Default is 8989
-        path: / # Default is /. If set, it must start and finish with /. Eg: /radarr/
+        path: / # Default is /. If set, it must start and finish with /. Eg: /sonarr/
         ssl: false # Default false
       auth:
         apikey: 
@@ -13,7 +13,7 @@ sonarr:
         password: 
       search: true # Start search after adding series
       seasonFolder: true
-      excludedRootFolders:# If set must not have a trailing slash Eg: /mnt/Media
+      excludedRootFolders: # If set must not have a trailing slash Eg: /mnt/Media
         - # First excluded folder, add others with a "-" on a new line (same indentation)
       narrowRootFolderNames: true # If true, only the last folder name will be shown instead of full path
       excludedQualityProfiles:
@@ -27,7 +27,7 @@ sonarr:
     #   server:
     #     addr: 
     #     port: 8980
-    #     path: / # Default is /. If set, it must start and finish with /. Eg: /radarr/
+    #     path: / # Default is /. If set, it must start and finish with /. Eg: /sonarr/
     #     ssl: false # Default false
     #   auth:
     #     apikey: 
@@ -35,7 +35,7 @@ sonarr:
     #     password: 
     #   search: true # Start search after adding series
     #   seasonFolder: true
-    #   excludedRootFolders:# If set must not have a trailing slash Eg: /mnt/Media
+    #   excludedRootFolders: # If set must not have a trailing slash Eg: /mnt/Media
     #     - # First excluded folder, add others with a "-" on a new line (same indentation)
     #   narrowRootFolderNames: true # If true, only the last folder name will be shown instead of full path
     #   excludedQualityProfiles:
@@ -58,13 +58,13 @@ radarr:
         apikey: 
         username: 
         password: 
-      search: true # Start search after adding series
+      search: true # Start search after adding movie
       minimumAvailability: announced
       excludedRootFolders: # If set must not have a trailing slash Eg: /mnt/Media
         - # First excluded folder, add others with a "-" on a new line (same indentation)
       narrowRootFolderNames: true # If true, only the last folder name will be shown instead of full path
       excludedQualityProfiles:
-        - 
+        -  # First excluded quality profile, add others with a "-" on a new line (same indentation)
       defaultTags:
         - addarr
       addRequesterIdTag: true # Add telegram user id as tag on movies
@@ -80,13 +80,13 @@ radarr:
     #     apikey: 
     #     username: 
     #     password: 
-    #   search: true # Start search after adding series
+    #   search: true # Start search after adding movie
     #   minimumAvailability: announced
     #   excludedRootFolders: # If set must not have a trailing slash Eg: /mnt/Media
     #     - # First excluded folder, add others with a "-" on a new line (same indentation)
     #   narrowRootFolderNames: true # If true, only the last folder name will be shown instead of full path
     #   excludedQualityProfiles:
-    #     - 
+    #     - # First excluded quality profile, add others with a "-" on a new line (same indentation)
     #   defaultTags:
     #     - addarr
     #   addRequesterIdTag: true # Add telegram user id as tag on movies
@@ -138,11 +138,13 @@ qbittorrent:
 language: en-us # de-de, en-us, es-es, fr-fr, it-it, nl-be, pl-pl, pt-pt, ru-ru
 
 ## Entrypoints
-entrypointAuth: auth # auth or a custom entrypoint
 entrypointHelp: help # help entrypoint
+entrypointAuth: auth # auth or a custom entrypoint
 entrypointAdd: start # start or a custom entrypoint
+entrypointDelete: delete # delete or a custom entrypoint
 entrypointAllSeries: allSeries # allSeries or a custom entrypoint
 entrypointAllMovies: allMovies # allMovies or a custom entrypoint
+entrypointNotify: notify # notify or a custom entrypoint
 entrypointTransmission: transmission # transmission or a custom entrypoint
 entrypointSabnzbd: sabnzbd # sabnzbd or a custom entrypoint
 entrypointqBittorrent: qbittorrent # qbittorrent or a custom entrypoint

@@ -11,7 +11,9 @@ from telegram.ext import (CallbackQueryHandler, CommandHandler,
                           ContextTypes, Application)
 from telegram.warnings import PTBUserWarning
 
-from commons import checkAllowed, checkId, authentication, format_bytes, getAuthChats, getService, clearUserData
+from commons import (checkAllowed, checkId, authentication,
+                    format_bytes, getAuthChats, getService, clearUserData, 
+                    checkNotificationSubscribed, generateProfileName)
 import logger
 import radarr as radarr
 import sonarr as sonarr
@@ -62,7 +64,15 @@ def main():
           ),
           authentication,
     )
-        
+    
+    notification_handler_command = CommandHandler(config["entrypointNotify"], addNotificationChannel)
+    notification_handler_text = MessageHandler(
+          filters.Regex(
+               re.compile(r"^/?"+ re.escape(config["entrypointNotify"]) + r"(?:\s.*)?$", re.IGNORECASE)
+          ),
+          addNotificationChannel,
+    )
+
     listAllMediaHandler = ConversationHandler(
         entry_points=[
                 CommandHandler(config["entrypointAllSeries"], all.startAllSeries),
@@ -328,6 +338,9 @@ def main():
 
     application.add_handler(auth_handler_command)
     application.add_handler(auth_handler_text)
+
+    application.add_handler(notification_handler_command)
+    application.add_handler(notification_handler_text)
 
     application.add_handler(listAllMediaHandler)
     application.add_handler(addMedia_handler)
@@ -1347,6 +1360,56 @@ async def addMedia(update : Update, context: ContextTypes.DEFAULT_TYPE):
         clearUserData(context)
         return ConversationHandler.END
 
+async def addNotificationChannel(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
+        #When using this mode, bot will remain silent if user is not in the allowlist.txt
+        logger.info("Allowlist is enabled, but userID isn't added into 'allowlist.txt'. So bot stays silent")
+        return ConversationHandler.END
+    
+    subbed = await checkNotificationSubscribed(update.effective_message.chat_id)
+    if subbed:
+        await context.bot.send_message(
+            chat_id=update.effective_message.chat_id,
+            text=i18n.t("addarr.Notification already added"),
+        )
+        return
+    
+    await context.bot.send_message(
+        chat_id=update.effective_message.chat_id, 
+        text=i18n.t("addarr.Creating Notifications")
+    )
+    # add notifications to each instance. check each instance before adding. use chatID as profileName
+    # check radarr and sonarr as well
+    radarr_instances = config['radarr']['instances']
+    sonarr_instances = config['sonarr']['instances']
+
+    chatId = update.effective_message.chat_id
+
+    for instance in radarr_instances:
+        radarr.setInstance(instance["label"])
+        if not radarr.notificationProfileExist(chatId):
+            # create new
+            profileName = await generateProfileName(context, chatId)
+            status = radarr.createNotificationProfile(profileName, update.effective_chat.id)
+            if status:
+                label = instance["label"]
+                logger.info(f"Successfully created notification profiles for radarr instance {label}")
+    
+        
+    for instance in sonarr_instances:
+        sonarr.setInstance(instance["label"])
+        if not sonarr.notificationProfileExist(chatId):
+            # create new
+            profileName = await generateProfileName(context, chatId)
+            status = sonarr.createNotificationProfile(profileName, update.effective_chat.id)
+            if status:
+                label = instance["label"]
+                logger.info(f"Successfully created notification profiles for sonar instance {label}")
+
+    await context.bot.send_message(
+        chat_id=update.effective_message.chat_id,
+        text=i18n.t("addarr.Notification enabled"),
+    )
 
 async def help(update : Update, context: ContextTypes.DEFAULT_TYPE):
     if config.get("enableAllowlist") and not checkAllowed(update,"regular"):

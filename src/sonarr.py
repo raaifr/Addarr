@@ -201,3 +201,135 @@ def getDbIdFromImdbId(tvdbId):
     parsed_json = json.loads(req.text)
     dbId = [f["id"] for f in parsed_json if f["tvdbId"] == tvdbId]
     return dbId[0]
+
+def notificationProfileExist(chatid):
+    # check if profile exists
+    profiles = requests.get(commons.generateApiQuery("sonarr", "notification"))
+    response_content = json.loads(profiles.content.decode('utf-8'))
+    profileExists = any(str(chatid) in item['name'] for item in response_content)
+    if profileExists: 
+        label = getInstance()["label"]
+        logger.debug(f'Notification Profile for user {chatid} already exists in instance {label}')
+        return True
+    else:
+        return False
+    
+
+def createNotificationProfile(profileName, chatid):
+    bot_token = config["telegram"]["token"]
+    # check if user tag exists
+    logger.debug(f'Check if user tag exists: {chatid}')
+    tag_id = tagExists(chatid)
+
+    if tag_id is None:
+        # create the tag first
+        logger.debug(f'Creating user tag: {chatid}')
+        tag_id = createTag(chatid)
+        logger.debug(f'Tag created with ID: {tag_id}')
+
+    if notificationProfileExist(chatid):
+        return True
+    
+    data_json = {
+        "name": str(profileName),
+        "implementation": "Telegram",
+        "isEnabled": False,
+        "configContract": "TelegramSettings",
+        "fields": [
+              {
+                "order": 0,
+                "name": "botToken",
+                "label": "Bot Token",
+                "helpLink": "https://core.telegram.org/bots",
+                "type": "textbox",
+                "advanced": False,
+                "privacy": "apiKey",
+                "isFloat": False,
+                "value": str(bot_token)
+              },
+              {
+                "order": 1,
+                "name": "chatId",
+                "label": "Chat ID",
+                "helpText": "You must start a conversation with the bot or add it to your group to receive messages",
+                "helpLink": "http://stackoverflow.com/a/37396871/882971",
+                "type": "textbox",
+                "advanced": False,
+                "privacy": "normal",
+                "isFloat": False,
+                "value": str(chatid)
+              },
+              {
+                "order": 2,
+                "name": "topicId",
+                "label": "Topic ID",
+                "helpText": "Specify a Topic ID to send notifications to that topic. Leave blank to use the general topic (Supergroups only)",
+                "helpLink": "https://stackoverflow.com/a/75178418",
+                "type": "textbox",
+                "advanced": False,
+                "privacy": "normal",
+                "isFloat": False
+              },
+              {
+                "order": 3,
+                "name": "sendSilently",
+                "label": "Send Silently",
+                "helpText": "Sends the message silently. Users will receive a notification with no sound",
+                "value": False,
+                "type": "checkbox",
+                "advanced": False,
+                "privacy": "normal",
+                "isFloat": False
+              },
+              {
+                "order": 4,
+                "name": "includeAppNameInTitle",
+                "label": "Include Radarr in Title",
+                "helpText": "Optionally prefix message title with Radarr to differentiate notifications from different applications",
+                "value": False,
+                "type": "checkbox",
+                "advanced": False,
+                "privacy": "normal",
+                "isFloat": False
+              }
+            ],
+        "tags": [tag_id],
+        "onGrab": False,
+        "onDownload": True,
+        "onUpgrade": True,
+        "onRename": False,
+        "onMovieAdded": False,
+        "onMovieDelete": True,
+        "onMovieFileDelete": False,
+        "onMovieFileDeleteForUpgrade": True,
+        "onHealthIssue": False,
+        "onHealthRestored": False,
+        "onApplicationUpdate": False,
+        "onManualInteractionRequired": False,
+        "supportsOnGrab": False,
+        "supportsOnDownload": True,
+        "supportsOnUpgrade": True,
+        "supportsOnRename": False,
+        "supportsOnMovieAdded": False,
+        "supportsOnMovieDelete": True,
+        "supportsOnMovieFileDelete": False,
+        "supportsOnMovieFileDeleteForUpgrade": True,
+        "supportsOnHealthIssue": False,
+        "supportsOnHealthRestored": False,
+        "supportsOnApplicationUpdate": False,
+        "supportsOnManualInteractionRequired": False,
+        "includeHealthWarnings": False
+    }
+
+    headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    }
+
+
+    add = requests.post(commons.generateApiQuery("sonarr", "notification"), json=data_json, headers=headers)
+
+    if add.status_code == 201:
+        return True
+    else:
+        return False

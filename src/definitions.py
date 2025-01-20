@@ -13,6 +13,7 @@ CHATID_PATH = os.path.join(ROOT_DIR, "chatid.txt")
 LOG_PATH = os.path.join(ROOT_DIR, "logs", "addarr.log")
 ADMIN_PATH = os.path.join(ROOT_DIR, "admin.txt")
 ALLOWLIST_PATH = os.path.join(ROOT_DIR, "allowlist.txt")
+NOTIFICATIONLIST_PATH = os.path.join(ROOT_DIR, "notification.txt")
 
 DEFAULT_SETTINGS = {
     "entrypointAuth": "auth", #auth or a custom entrypoint
@@ -20,6 +21,7 @@ DEFAULT_SETTINGS = {
     "entrypointDelete": "delete", #start or a custom entrypoint
     "entrypointAllSeries": "allSeries", #allSeries or a custom entrypoint
     "entrypointAllMovies": "allMovies", #allMovies or a custom entrypoint
+    "entrypointNotify": "notify", #notify or a custom entrypoint
     "entrypointTransmission": "transmission", #transmission or a custom entrypoint
     "entrypointSabnzbd": "sabnzbd", #sabnzbd or a custom entrypoint
     "entrypointqBittorrent": "qbittorrent", #qbittorrent or a custom entrypoint
