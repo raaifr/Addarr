@@ -1,62 +1,66 @@
-#Italiano - Italia
-it-it: 
-  Start: Inizia
-  Stop: Ferma
-  Movie: Film
-  MovieWithArticle: Film
-  Series: Serie
-  SeriesWithArticle: Serie
-  Start chatting: Inizia a chattare con Addarr su Telegram. La prima volta che usi "start" dovrai inserire la password.
-  End: L'aggiunta/eliminazione di film o serie è terminata.
-  Title: "Inserisci il titolo:"
-  What is this?: È un film o una serie?
-  New: Inizia una nuova ricerca
-  Next result: No, mostra il prossimo risultato
-  Add: Sì, aggiungilo
-  Delete: Sì, eliminare questo
-  StopDelete: No, non voglio cancellarlo
-  Select: Sì, seleziona questo
-  Select a path: Per favore scegli una cartella per il film o per la serie
-  Select a quality: Per favore seleziona un profilo di qualità per il film o la serie
-  Select from which season: Da quale stagione?
-  Selected and future seasons: Stagioni selezionate e future 
-  Season: Stagione
-  Select all seasons: Seleziona tutte le stagioni
-  Deselect all seasons: Deseleziona tutte le stagioni
-  Authorize: Devi prima autenticare questa chat. Qual'è la password?
-  Wrong password: La password è sbagliata. Riprova...
-  Chatid added: "Questa chat è stata aggiunta alla lista delle chat autorizzate. Ora puoi utilizzare il bot. \nSe avevi inviato un comando, dovrai inviarlo di nuovo."
-  NotAdmin: "Devi essere un amministratore per eseguire questo comando."
-  Chatid already allowed: "Chat già autorizzata"
-  Help: "Per leggere questo messaggio, usa /%{help}.
-    \n• Per autenticarti usa /%{authenticate}.
-    \n• Per aggiungere un film o una serie usa /%{add}.
-    \n• Per cancellare una serie o un film usa /%{delete}.
-    \n• Per aggiungere velocemente un film o una serie usa /%{movie} o /%{serie}.
-    \n• Per vedere quali serie sono presenti in Sonarr usa /%{allSeries}.
-    \n• Per vedere quali film sono presenti in Radarr usa /%{allMovies}.
-    \n• Per cambiare la velocità di download di Transmission usa /%{transmission}.
-    \n• To change the up- and download speed of Sabnzbd use /%{sabnzbd}."
-  Missing config: "You are missing the following configkeys in your config.yaml-file: %{missingKeys}.
-    \nAdd these before restarting the bot."
-  Wrong values: "The following configkeys has a wrong value in your config.yaml-file: %{wrongValues}.
-    \nChange these before restarting the bot."
+# it-IT Italian (Italy)
+it-it:
+  General:
+    Start: Inizia
+    Stop: Ferma
+    Find: Trova  #ADDED
+    Movie: Film
+    MovieWithArticle: Film
+    Series: Serie
+    SeriesWithArticle: Serie
+    Title: "Inserisci il titolo:"
+    WhatIsThis: È un film o una serie?
+    New: Inizia una nuova ricerca
+    Season: Stagione
+    End: L'aggiunta/eliminazione di film o serie è terminata.
+    SelectAnInstance: Seleziona un'istanza  #ADDED
+    SelectAPath: Per favore scegli una cartella per il film o per la serie
+    SelectAQuality: Per favore seleziona un profilo di qualità per il film o la serie
+    SelectFromWhichSeason: Da quale stagione?
+    SelectedAndFutureSeasons: Stagioni selezionate e future
+    SelectAllSeasons: Seleziona tutte le stagioni
+    DeselectAllSeasons: Deseleziona tutte le stagioni
 
-  messages:
+  Actions:
+    Add: Sì, aggiungilo
+    Delete: Sì, eliminare questo
+    StopDelete: No, non voglio cancellarlo
+    Select: Sì, seleziona questo
+    PreviousResult: Risultato precedente  #ADDED
+    NextResult: No, mostra il prossimo risultato
+
+  Authorization:
+    Authorize: Devi prima autenticare questa chat. Qual'è la password?
+    WrongPassword: La password è sbagliata. Riprova...
+    ChatID_Added: "Questa chat è stata aggiunta alla lista delle chat autorizzate. Ora puoi utilizzare il bot. \nSe avevi inviato un comando, dovrai inviarlo di nuovo."
+    NotAdmin: "Devi essere un amministratore per eseguire questo comando."
+    ChatID_Allowed: "Chat già autorizzata"
+
+  Notifications:
+    ProfileCreated: Profili di notifica creati.  #ADDED
+    ProfileExists: Sei già iscritto alle notifiche.  #ADDED
+    CreatingProfiles: Le sottoscrizioni alle notifiche verranno ora create.  #ADDED
+
+  Messages:
     Add: Si, aggiungi %{subject}
     This: Vuoi aggiungere questa/o %{subjectWithArticle}?
     ThisDelete: È questo %{subjectWithArticle} che si vuole cancellare?
     AddFailed: Oops, non sono riuscito ad aggiungere la/il %{subjectWithArticle}. Riprova.
     DeleteFailed: Oops, non è riuscito a eliminare %{subjectWithArticle}. Riprova.
     AddSuccess: "%{subjectWithArticle} aggiunta/o correttamente 🙂"
-    DeleteSuccess: "%{subjectWithArticle} è stato rimosso con successo 🙂 "
+    DeleteSuccess: "%{subjectWithArticle} è stato rimosso con successo 🙂"
     Exist: "%{subjectWithArticle} già esistente 😉"
     NoExist: "%{subjectWithArticle} non esiste."
-  
-  searchresults:
+    LoadingAll: Questo potrebbe richiedere alcuni minuti a seconda della tua libreria. Attendere...  #ADDED
+    MissingConfig: "You are missing the following configkeys in your config.yaml-file: %{missingKeys}.\nAdd these before restarting the bot."
+    ConfigError: "The following configkeys has a wrong value in your config.yaml-file: %{wrongValues}.\nChange these before restarting the bot."
+    StartChatting: Inizia a chattare con Addarr su Telegram. La prima volta che usi "start" dovrai inserire la password.
+
+  SearchResults:
     zero: Nessun risultato
     one: Un solo risultato
     other: "%{count} risultati"
+    PreviousResult: Risultato precedente  #ADDED
 
   Transmission:
     NotEnabled: "Le funzioni per Transmission non sono attivate"
@@ -77,10 +81,45 @@ it-it:
     ChangedTo100: Limite disattivato
     Error: Errore nell'impostazione della velocità
 
-  Notifications:
+  qBittorrent:  #ADDED
+    NotEnabled: La funzione qBittorrent non è attivata.
+    Speed: Quale velocità vuoi che qBittorrent utilizzi?
+    Alternate: Limite di velocità alternativo
+    Normal: Velocità normale
+    ChangedToAlternate: Limite di velocità alternativo attivato
+    ChangedToNormal: Velocità normale attivata
+    Error: Errore durante l'impostazione del limite di velocità
+
+  AdminNotifications:
     Stop: l'utente %{first_name} con chat_id %{chat_id} ha interrotto il processo.
     Start: L'utente %{first_name} con chat_id %{chat_id} ha avviato una nuova richiesta.
     AddSuccess: Il %{subjectWithArticle} %{title} dell'utente %{first_name} con chat_id %{chat_id} è stato aggiunto.
     AddFailed: Errore nell'aggiunta del %{subjectWithArticle} %{title} dell'utente %{first_name} con chat_id %{chat_id}.
     Exist: Il %{subjectWithArticle} %{title} che l'utente %{first_name} con chat_id %{chat_id} voleva aggiungere esiste già.
     Delete: l'utente %{first_name} con chat_id %{chat_id} ha avviato una nuova eliminazione.
+
+  Help: "
+    <b>Comandi di Addarr</b>
+    \n<i>Per leggere questo messaggio, usa /%{help}</i>
+    \n• Per autenticarti usa /%{authenticate} [password].
+    \n• Per aggiungere un film o una serie usa /%{add}.
+    \n• Per cancellare una serie o un film usa /%{delete}.
+    \n• Per vedere quali serie sono presenti in Sonarr usa /%{allSeries}.
+    \n• Per vedere quali film sono presenti in Radarr usa /%{allMovies}.
+    \n\n<b>Comandi in una riga</b>
+    \n• Aggiungi direttamente: /%{movie} o /%{serie}.
+    \n  Esempio: %{movie} Superman o %{serie} The Office.
+    \n\n<b>Impostazioni client di download</b>
+    \n• Velocità di Transmission: /%{transmission}.
+    \n• Velocità di Sabnzbd: /%{sabnzbd}.
+    \n• Velocità di qBittorrent: /%{qbittorrent}.
+    \n\nPer notifiche quando i media sono pronti: /%{notify}."
+
+  CommandDescriptions:  #ADDED
+    Authenticate: Autenticati prima del primo utilizzo
+    Add: Aggiungi media
+    Help: Guida ai comandi
+    Movie: Aggiungi un film
+    Series: Aggiungi una serie TV
+    Delete: Elimina un titolo
+    AllMovies: Mostra tutti

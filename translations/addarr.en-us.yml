@@ -1,80 +1,75 @@
-#English - United States
+# en-US English (United States)
 en-us: 
-  Start: Start
-  Stop: Stop
-  Movie: Movie
-  MovieWithArticle: The movie
-  Series: Series
-  SeriesWithArticle: The series
-  Find: Find
-  Start chatting: Start chatting with Addarr in Telegram. The first time you use "start" you will be asked to enter your password.
-  End: The adding/deleting of movies or series has ended.
-  Title: "Enter the title:"
-  What is this?: Is this a movie or a series?
-  New: New search
-  Previous result: Previous
-  Next result: Next
-  Add: Yes, add this
-  Delete: Yes, delete this
-  StopDelete: No, I don't want to delete this
-  Select: Yes, select this
-  Select an instance: Please select an instance
-  Select a path: Please select a path for the movie or series
-  Select a quality: Please select a quality profile for the movie or series
-  Select from which season: From which season?
-  Selected and future seasons: Selected and future seasons
-  Season: Season
-  Select all seasons: Select all seasons
-  Deselect all seasons: Deselect all seasons
-  Authorize: You first need to authorize this chat. What is the password?
-  Wrong password: You entered the wrong password. Try again...
-  Loading All: This may take a few mins depending on your library. Please wait . . . 
-  Chatid added: "This chat is successfully added to the list of allowed chats. Now you can start using this bot. \nIf you entered a command, you need to execute it again."
-  NotAdmin: "You need to be an admin to execute this command."
-  Chatid already allowed: "This chat is already authorized."
-  Notification enabled: "Notification profiles created. You will receive notifications when the media you add is downloaded."
-  Notification already added: "You are already subscribed to notifications"
-  Creating Notifications: "The notification subscriptions will now be created. You may receive some test notifications."
-  Help: "Want to see this text again? Use /%{help}.
-    \n• To authenticate before first use you should use /%{authenticate} or /auth password.
-    \n• To add a movie or series use /%{add}.
-    \n• To delete a movie or series use /%{delete}.
-    \n• To immediately add a movie or series you can use /%{movie} or /%{serie}.
-    \n• You can also use single line commands to add movies or series eg. %{movie} Superman or %{serie} House
-    \n• To check which series are in Sonarr you can use /%{allSeries}.
-    \n• To check which movies are in Radarr you can use /%{allMovies}.
-    \n• To toggle the up- and download speed of Transmission use /%{transmission}.
-    \n• To change the up- and download speed of Sabnzbd use /%{sabnzbd}.
-    \n• To change the up- and download speed of qBittorrent use /%{qbittorrent}.
-    \n• If you want to be notified when your media is ready to watch use /%{notify}."
-  Missing config: "You are missing the following configkeys in your config.yaml-file: %{missingKeys}.
-    \nAdd these before restarting the bot."
-  Wrong values: "The following configkeys has a wrong value in your config.yaml-file: %{wrongValues}.
-    \nChange these before restarting the bot."
+  General: 
+    Start: Start
+    Stop: Stop
+    Find: Find
+    Movie: Movie
+    MovieWithArticle: The movie
+    Series: Series
+    SeriesWithArticle: The series
+    Title: Enter the title
+    WhatIsThis: Is this a movie or a series?
+    New: New search
+    Season: Season
+    End: The current operation terminated by user.
+    SelectAnInstance: Please select an instance
+    SelectAPath: Please select a path for the movie or series
+    SelectAQuality: Please select a quality profile for the movie or series
+    SelectFromWhichSeason: From which season?
 
-  messages:
-    Add: Yes, add this %{subject}
-    This: Is this %{subjectWithArticle} you want to add?
-    ThisDelete: Is this %{subjectWithArticle} you want to delete?
+  Actions:
+    Add: Yes, add this
+    Delete: Yes, delete this
+    StopDelete: No, I don't want to delete this
+    Select: Yes, select this
+    SelectedAndFutureSeasons: Selected and future seasons
+    Select all seasons: Select all seasons
+    DeselectAllSeasons: Deselect all seasons
+
+  Authorization:
+    Authorize: You first need to authorize this chat. What is the password?
+    WrongPassword: You entered the wrong password. Try again...
+    ChatID_Added: This chat is successfully added to the list of allowed chats. Now you can start using this bot. \nIf you entered a command, you need to execute it again.
+    NotAdmin: You need to be an admin to execute this command.
+    ChatID_Allowed: This chat is already authorized.
+  
+  Notifications:
+    ProfileCreated: Notification profiles created. You will receive notifications when the media you add is downloaded.
+    ProfileExists: You are already subscribed to notifications
+    CreatingProfiles: The notification subscriptions will now be created. You may receive some test notifications.
+
+  Messages:
+    Add: "Yes, add this %{subject}"
+    This: "Is this %{subjectWithArticle} you want to add?"
+    ThisDelete: "Is this %{subjectWithArticle} you want to delete?"
     AddFailed: Oops, failed to add %{subjectWithArticle}. Maybe give it another try.
     DeleteFailed: Oops, failed to delete %{subjectWithArticle}. Maybe give it another try.
-    AddSuccess: "%{subjectWithArticle} is added with success 🙂"
-    DeleteSuccess: "%{subjectWithArticle} is deleted with success 🙂"
+    AddSuccess: "%{subjectWithArticle} added successfully 🙂"
+    DeleteSuccess: "%{subjectWithArticle} deleted successfully 🙂"
     Exist: "%{subjectWithArticle} already exists 😉"
     NoExist: "%{subjectWithArticle} does not exist"
+    LoadingAll: This may take a few mins depending on your library. Please wait . . . 
+    MissingConfig: "You are missing the following configkeys in your config.yaml file: %{missingKeys}.
+      \nAdd these before restarting the bot."
+    ConfigError: "The following configkeys has a wrong value in your config.yaml file: %{wrongValues}.
+      \nChange these before restarting the bot."
+    StartChatting: Start chatting with Addarr in Telegram. The first time you use "start" you will be asked to enter your password.
 
-  searchresults:
+  SearchResults:
     zero: No results found
     one: One search result
     other: "%{count} search results"
+    PreviousResult: Previous
+    NextResult: Next
 
   Transmission:
-    NotEnabled: "The Transmission function is not activated."
-    Speed: "Which speed do you want Transmission to use?"
+    NotEnabled: The Transmission function is not activated.
+    Speed: Which speed do you want Transmission to use?
     TSL: Temporary Speed Limits
     Normal: Normal speed
-    ChangedToTSL: "Temporary Speed Limits is enabled."
-    ChangedToNormal: "Temporary Speed Limits is disabled."
+    ChangedToTSL: Temporary Speed Limits is enabled.
+    ChangedToNormal: Temporary Speed Limits is disabled.
 
   Sabnzbd:
     NotEnabled: The Sabnzbd function is not activated.
@@ -96,7 +91,7 @@ en-us:
     ChangedToNormal: Normal Speed activated
     Error: Something went wrong while trying to set the speed limit
 
-  Notifications:
+  AdminNotifications:
     Stop: User %{first_name} with chat_id %{chat_id} has stopped the process.
     Start: The user %{first_name} with chat_id %{chat_id} has started a new request.
     AddSuccess: The %{subjectWithArticle} %{title} of user %{first_name} with chat_id %{chat_id} has been added.
@@ -104,18 +99,38 @@ en-us:
     Exist: The %{subjectWithArticle} %{title} that the user %{first_name} with chat_id %{c.hat_id} wanted to add already exists.
     Delete: The user %{first_name} with chat_id %{chat_id} has initiated a new deletion.
 
-  Descriptions:
+  Help: "
+    <b><b>Addarr Commands</b></b>
+    \n<i>Want to see this text again? Use /%{help}</i>\n
+    \n• You need to authorize yourself before first use.
+        Use /%{authenticate} [password]
+    \n• To add a movie or series, use /%{add}.
+    \n• To delete a movie or series, use /%{delete}.
+    \n• To list series in Sonarr, you can use /%{allSeries}.
+    \n• To list movies in Radarr, you can use /%{allMovies}.
+    \n\n<b>Single Line Commands</b>
+    \n• To immediately add a movie or series, you can use /%{movie} or /%{serie}.
+    \n  e.g., %{movie} Superman or %{serie} House.
+    \n\n<b>Download Client Settings</b>
+    \n• To toggle the up- and download speed of Transmission, use /%{transmission}.
+    \n• To change the up- and download speed of Sabnzbd, use /%{sabnzbd}.
+    \n• To change the up- and download speed of qBittorrent, use /%{qbittorrent}.
+    \n\n
+    If you want to be notified when your media is ready to watch, use /%{notify}.
+    "
+  
+  CommandDescriptions:
     Authenticate: Authorize yourself before first use
-    Add: "Add new media"
-    Help: "Details on commands and bot usage"
-    Movie: "Add a Movie"
-    Series: "Add a TV Show"
-    Delete: "Delete a title"
-    AllMovies: "Show all Movies"
-    AllSeries: "Show all Series"
-    Transmission: "Change Transmission speed"
-    Sabnzbd: "Change Transmission speed"
-    qBittorrent: "Change Transmission speed"
-    Notify: "Get notifications when media is ready"
+    Add: Add new media
+    Help: Details on commands and bot usage
+    Movie: Add a Movie
+    Series: Add a TV Show
+    Delete: Delete a title
+    AllMovies: Show all Movies
+    AllSeries: Show all Series
+    Transmission: Change Transmission speed
+    Sabnzbd: Change Transmission speed
+    qBittorrent: Change Transmission speed
+    Notify: Get notifications when media is ready
 
 

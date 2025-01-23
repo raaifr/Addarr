@@ -1,48 +1,47 @@
-#Polish - Poland
+# pl-PL Polish (Poland)
 pl-pl:
-  Start: Rozpocznij
-  Stop: Przerwij
-  Movie: Film
-  MovieWithArticle: Ten film
-  Series: Serial
-  SeriesWithArticle: Ten serial
-  Start chatting: Rozpocznij rozmowę z Addarrem na Telegramie. Przy pierwszym użyciu "start" zostaniesz poproszony o podanie hasła.
-  End: Dodawanie/usuwanie filmów lub seriali zostało zakończone.
-  Title: "Wpisz tytuł:"
-  What is this?: To jest film czy serial?
-  New: Szukaj jeszcze raz
-  Next result: Próbuj dalej
-  Add: Tak, chcę to!
-  Delete: Tak, usuń to
-  StopDelete: Nie, nie chcę tego usuwać
-  Select: Wybierz: Tak, wybierz to
-  Select a path: Wybierz ścieżkę dla filmu lub serialu
-  Select a quality: Proszę wybrać profil jakościowy dla filmu lub serialu
-  Select from which season: Od którego sezonu?
-  Selected and future seasons: Wybrane i przyszłe sezony
-  Season: Sezon
-  Select all seasons: Wybierz wszystkie sezony
-  Deselect all seasons: Odznacz wszystkie sezony
-  Authorize: Musisz zautoryzować ten czat. Jakie jest hasło?
-  Wrong password: Hasło nieprawidłowe. Spróbuj ponownie...
-  Chatid added: "Ten czat został dodany do whitelisty. Teraz możesz używać tego bota."
-  NotAdmin: "Nie jesteś uprawniony do wykonania tej komendy!"
-  Chatid already allowed: "Ten czat już jest zautoryzowany."
-  Help: "Potrzebujesz pomocy? Użyj /%{help}!
-    \n/%{authenticate} —  autoryzacja Twojego czatu
-    \n/%{add} — dodawanie nowego filmu/serialu
-    \n/%{delete} - usuwanie nowego filmu/serialu
-    \n/%{movie} lub /%{serie} — natychmiastowy wybór typu treści
-    \n/%{allSeries} — lista wszystkich istniejących seriali
-    \n/%{allMovies} — lista wszystkich istniejących filmów.
-    \n/%{transmission} - kontrola szybkości pobierania w Transmission.
-    \n/%{sabnzbd} - kontrola szybkości pobierania w Sabnzbd."
-  Missing config: "Brakuje kluczy configa w Twoim pliku config.yaml: %{missingKeys}.
-    \nDodaj je przed uruchomieniem bota."
-  Wrong values: "Te klucze configa w Twoim pliku config.yaml mają nieprawidłową wartość: %{wrongValues}.
-    \nPopraw je przed uruchomieniem bota."
+  General:
+    Start: Rozpocznij
+    Stop: Przerwij
+    Find: Znajdź  #ADDED
+    Movie: Film
+    MovieWithArticle: Ten film
+    Series: Serial
+    SeriesWithArticle: Ten serial
+    Title: "Wpisz tytuł:"
+    WhatIsThis: To jest film czy serial?
+    New: Szukaj jeszcze raz
+    Season: Sezon
+    End: Dodawanie/usuwanie filmów lub seriali zostało zakończone.
+    SelectAnInstance: Wybierz instancję  #ADDED
+    SelectAPath: Wybierz ścieżkę dla filmu lub serialu
+    SelectAQuality: Proszę wybrać profil jakościowy dla filmu lub serialu
+    SelectFromWhichSeason: Od którego sezonu?
+    SelectedAndFutureSeasons: Wybrane i przyszłe sezony
+    SelectAllSeasons: Wybierz wszystkie sezony
+    DeselectAllSeasons: Odznacz wszystkie sezony
 
-  messages:
+  Actions:
+    Add: Tak, chcę to!
+    Delete: Tak, usuń to
+    StopDelete: Nie, nie chcę tego usuwać
+    Select: Wybierz: Tak, wybierz to
+    PreviousResult: Poprzedni wynik  #ADDED
+    NextResult: Próbuj dalej
+
+  Authorization:
+    Authorize: Musisz zautoryzować ten czat. Jakie jest hasło?
+    WrongPassword: Hasło nieprawidłowe. Spróbuj ponownie...
+    ChatID_Added: "Ten czat został dodany do whitelisty. Teraz możesz używać tego bota."
+    NotAdmin: "Nie jesteś uprawniony do wykonania tej komendy!"
+    ChatID_Allowed: "Ten czat już jest zautoryzowany."
+
+  Notifications:
+    ProfileCreated: Profile powiadomień utworzone.  #ADDED
+    ProfileExists: Subskrybujesz już powiadomienia.  #ADDED
+    CreatingProfiles: Subskrypcje powiadomień będą teraz tworzone.  #ADDED
+
+  Messages:
     Add: Tak, dodaj %{subject}
     This: O %{subjectWithArticle} Ci chodzi?
     ThisDelete: Czy ten %{subjectWithArticle} chcesz usunąć?
@@ -52,11 +51,16 @@ pl-pl:
     DeleteSuccess: "%{subjectWithArticle} has been successfully removed 🙂"
     Exist: "%{subjectWithArticle} już istnieje 😉"
     NoExist: "%{subjectWithArticle} nie istnieje"
-    
-  searchresults:
+    LoadingAll: To może zająć kilka minut w zależności od biblioteki. Proszę czekać...  #ADDED
+    MissingConfig: "Brakuje kluczy configa w Twoim pliku config.yaml: %{missingKeys}.\nDodaj je przed uruchomieniem bota."
+    ConfigError: "Te klucze configa w Twoim pliku config.yaml mają nieprawidłową wartość: %{wrongValues}.\nPopraw je przed uruchomieniem bota."
+    StartChatting: Rozpocznij rozmowę z Addarrem na Telegramie. Przy pierwszym użyciu "start" zostaniesz poproszony o podanie hasła.
+
+  SearchResults:
     zero: Brak rezultatów
     one: Jeden rezultat
     other: "%{count} rezultatów"
+    PreviousResult: Poprzedni wynik  #ADDED
 
   Transmission:
     NotEnabled: "Funkcja Transmission jest nieaktywna."
@@ -77,10 +81,50 @@ pl-pl:
     ChangedTo100: Brak limitu prędkości pobierania
     Error: Coś poszło nie tak podczas ustawiania limitu
 
-  Notifications:
+  qBittorrent:  #ADDED
+    NotEnabled: Funkcja qBittorrent jest nieaktywna.
+    Speed: Jaką prędkość pobierania qBittorrent ma używać?
+    Alternate: Alternatywny limit prędkości
+    Normal: Normalna prędkość
+    ChangedToAlternate: Alternatywny limit prędkości aktywowany
+    ChangedToNormal: Normalna prędkość aktywowana
+    Error: Błąd podczas ustawiania limitu prędkości
+
+  AdminNotifications:
     Stop: Użytkownik %{first_name} z identyfikatorem chat_id %{chat_id} zatrzymał proces.
     Start: Użytkownik %{first_name} z identyfikatorem chat_id %{chat_id} rozpoczął nowe żądanie.
     AddSuccess: Artykuł %{subjectWithArticle} %{title} użytkownika %{first_name} z identyfikatorem chat_id %{chat_id} został dodany.
     AddFailed: Błąd dodawania %{subjectWithArticle} %{title} użytkownika %{first_name} z chat_id %{chat_id}.
     Exist: Artykuł %{subjectWithArticle} %{title}, który chciał dodać użytkownik %{first_name} with chat_id %{chat_id} już istnieje.
     Delete: Użytkownik %{first_name} z identyfikatorem chat_id %{chat_id} zainicjował nowe usunięcie.
+
+  Help: "
+    <b>Komendy Addarr</b>
+    \n<i>Potrzebujesz pomocy? Użyj /%{help}!</i>
+    \n• Autoryzacja: /%{authenticate} [hasło]
+    \n• Dodawanie: /%{add} (film/serial)
+    \n• Usuwanie: /%{delete} (film/serial)
+    \n• Lista seriali w Sonarr: /%{allSeries}
+    \n• Lista filmów w Radarr: /%{allMovies}
+    \n\n<b>Komendy jednoliniowe</b>
+    \n• Natychmiastowe dodawanie: /%{movie} lub /%{serie}.
+    \n  Przykład: %{movie} Superman lub %{serie} Wiedźmin.
+    \n\n<b>Ustawienia klientów pobierania</b>
+    \n• Prędkość Transmission: /%{transmission}
+    \n• Prędkość Sabnzbd: /%{sabnzbd}
+    \n• Prędkość qBittorrent: /%{qbittorrent}
+    \n\nPowiadomienia o gotowych mediach: /%{notify}."
+
+  CommandDescriptions:  #ADDED
+    Authenticate: Autoryzuj przed pierwszym użyciem
+    Add: Dodaj media
+    Help: Informacje o komendach
+    Movie: Dodaj film
+    Series: Dodaj serial
+    Delete: Usuń tytuł
+    AllMovies: Pokaż wszystkie filmy
+    AllSeries: Pokaż wszystkie seriale
+    Transmission: Zmień prędkość Transmission
+    Sabnzbd: Zmień prędkość Sabnzbd
+    qBittorrent: Zmień prędkość qBittorrent
+    Notify: Aktywuj powiadomienia

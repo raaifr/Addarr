@@ -29,7 +29,7 @@ async def startAllSeries(update, context):
             return ConversationHandler.END
     else:
         # prompt for sonarr instance selection
-        context.user_data["choice"] = i18n.t("addarr.Series")
+        context.user_data["choice"] = i18n.t("addarr.General.Series")
         await lsPromptInstanceSelection(update, context)
         return LS_GIVE_SERIE_INSTANCE
         
@@ -57,7 +57,7 @@ async def storeSerieInstance(update, context):
     if service.config.get("adminRestrictions") and not checkAllowed(update,"admin"):
         await context.bot.send_message(
             chat_id=update.effective_message.chat_id,
-            text=i18n.t("addarr.NotAdmin"),
+            text=i18n.t("addarr.Authorization.NotAdmin"),
         )
         return ConversationHandler.END
 
@@ -65,7 +65,7 @@ async def storeSerieInstance(update, context):
     await context.bot.edit_message_text(
             chat_id=update.effective_message.chat_id,
             message_id=msgid,
-            text=i18n.t("addarr.Loading All"),
+            text=i18n.t("addarr.Messages.LoadingAll"),
     )
 
     # show all series. 
@@ -100,7 +100,7 @@ async def startAllMovies(update, context):
             return ConversationHandler.END
     else:
         # prompt for sonarr instance selection
-        context.user_data["choice"] = i18n.t("addarr.Movie")
+        context.user_data["choice"] = i18n.t("addarr.General.Movie")
         await lsPromptInstanceSelection(update, context)
         return LS_GIVE_MOVIE_INSTANCE
         
@@ -130,7 +130,7 @@ async def storeMovieInstance(update, context):
     if service.config.get("adminRestrictions") and not checkAllowed(update,"admin"):
         await context.bot.send_message(
             chat_id=update.effective_message.chat_id,
-            text=i18n.t("addarr.NotAdmin"),
+            text=i18n.t("addarr.Authorization.NotAdmin"),
         )
         return ConversationHandler.END
 
@@ -138,7 +138,7 @@ async def storeMovieInstance(update, context):
     await context.bot.edit_message_text(
             chat_id=update.effective_message.chat_id,
             message_id=msgid,
-            text=i18n.t("addarr.Loading All"),
+            text=i18n.t("addarr.Messages.LoadingAll"),
     )
     
     # show all movies. 
@@ -158,7 +158,7 @@ async def storeMovieInstance(update, context):
     return ConversationHandler.END
 
 async def lsPromptInstanceSelection(update : Update, context):
-    service_name = 'radarr' if context.user_data["choice"].lower() == i18n.t("addarr.Movie").lower() else 'sonarr'
+    service_name = 'radarr' if context.user_data["choice"].lower() == i18n.t("addarr.General.Movie").lower() else 'sonarr'
     instances = config[service_name]["instances"] 
     if len(instances) == 1:
         # There is only 1 instance, so use it!
@@ -177,7 +177,7 @@ async def lsPromptInstanceSelection(update : Update, context):
     markup = InlineKeyboardMarkup(keyboard)
     
     msg = await update.effective_chat.send_message(
-        text=i18n.t("addarr.Select an instance"),
+        text=i18n.t("addarr.General.SelectAnInstance"),
         reply_markup=markup
     )
     context.user_data["update_msg"] = msg.message_id

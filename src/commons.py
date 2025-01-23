@@ -1,6 +1,7 @@
 import logging
 import math
 import os
+import re
 from telegram.ext import ConversationHandler
 import logger
 from config import config
@@ -166,7 +167,7 @@ async def authentication(update, context):
         if(str(chatid) in file.read()):
             await context.bot.send_message(
                 chat_id=update.effective_message.chat_id,
-                text=i18n.t("addarr.Chatid already allowed"),
+                text=i18n.t("addarr.Authorization.ChatID_Allowed"),
             )
             file.close()
         else:
@@ -181,7 +182,7 @@ async def authentication(update, context):
                     file.write(await getChatName(context, chatid))
                     await context.bot.send_message(
                         chat_id=update.effective_message.chat_id,
-                        text=i18n.t("addarr.Chatid added"),
+                        text=i18n.t("addarr.Authorization.ChatID_Added"),
                     )
                     file.close()
                     return "added"
@@ -190,7 +191,7 @@ async def authentication(update, context):
                     f"Failed authentication attempt by [{update.message.from_user.username}]. Password entered: [{password}]"
                 )
                 await context.bot.send_message(
-                    chat_id=update.effective_message.chat_id, text=i18n.t("addarr.Wrong password")
+                    chat_id=update.effective_message.chat_id, text=i18n.t("addarr.Authorization.WrongPassword")
                 )
                 return ConversationHandler.END # This only stops the auth conv, so it goes back to choosing screen
 
@@ -305,9 +306,9 @@ def getAuthChats():
     return chats
 
 def getService(context):
-    if context.user_data.get("choice").lower() == i18n.t("addarr.Series").lower():
+    if context.user_data.get("choice").lower() == i18n.t("addarr.General.Series").lower():
         return sonarr
-    elif context.user_data.get("choice").lower() == i18n.t("addarr.Movie").lower():
+    elif context.user_data.get("choice").lower() == i18n.t("addarr.General.Movie").lower():
         return radarr
     else:
         logger.warning(f"Cannot determine service based on unknown or missing choice: {context.user_data.get('choice')}")
@@ -327,4 +328,3 @@ def clearUserData(context):
         if x in context.user_data.keys()
     ]:
         context.user_data.pop(x)
-

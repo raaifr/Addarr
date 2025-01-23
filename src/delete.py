@@ -26,13 +26,13 @@ async def startDelete(update : Update, context: ContextTypes.DEFAULT_TYPE):
     if not checkAllowed(update, "admin") and config.get("enableAdmin"):
         await context.bot.send_message(
             chat_id=update.effective_message.chat_id,
-            text=i18n.t("addarr.NotAdmin"),
+            text=i18n.t("addarr.Authorization.NotAdmin"),
         )
         return ConversationHandler.END
 
     if not checkId(update):
         await context.bot.send_message(
-            chat_id=update.effective_message.chat_id, text=i18n.t("addarr.Authorize")
+            chat_id=update.effective_message.chat_id, text=i18n.t("addarr.Authorization.Authorize")
         )
         return MEDIA_DELETE_AUTHENTICATED
     
@@ -43,16 +43,16 @@ async def startDelete(update : Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         return MEDIA_DELETE_AUTHENTICATED
 
-    if reply == i18n.t("addarr.New").lower():
+    if reply == i18n.t("addarr.General.New").lower():
         logger.debug("User issued New command, so clearing user_data")
         clearUserData(context)
     
     await context.bot.send_message(
-        chat_id=update.effective_message.chat_id, text='\U0001F3F7 '+ i18n.t("addarr.Title")
+        chat_id=update.effective_message.chat_id, text='\U0001F3F7 '+ i18n.t("addarr.General.Title")
     )
     if not checkAllowed(update,"admin") and config.get("adminNotifyId") is not None:
         adminNotifyId = config.get("adminNotifyId")
-        message2=i18n.t("addarr.Notifications.Delete", first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
+        message2=i18n.t("addarr.AdminNotifications.Delete", first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
         await context.bot.send_message(
             chat_id=adminNotifyId, text=message2
     )
@@ -72,18 +72,18 @@ async def storeDeleteTitle(update : Update, context: ContextTypes.DEFAULT_TYPE):
 
         if not checkId(update):
             await context.bot.send_message(
-                chat_id=update.effective_message.chat_id, text=i18n.t("addarr.Authorize")
+                chat_id=update.effective_message.chat_id, text=i18n.t("addarr.Authorization.Authorize")
             )
             return MEDIA_DELETE_AUTHENTICATED
 
         if not checkAllowed(update,"admin") and config.get("adminNotifyId") is not None:
             adminNotifyId = config.get("adminNotifyId")
             await context.bot.send_message(
-                chat_id=adminNotifyId, text=i18n.t("addarr.Notifications.Stop", first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
+                chat_id=adminNotifyId, text=i18n.t("addarr.AdminNotifications.Stop", first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
             )
         clearUserData(context)
         await context.bot.send_message(
-            chat_id=update.effective_message.chat_id, text=i18n.t("addarr.End")
+            chat_id=update.effective_message.chat_id, text=i18n.t("addarr.General.End")
         )
         return ConversationHandler.END
     
@@ -102,22 +102,22 @@ async def storeDeleteTitle(update : Update, context: ContextTypes.DEFAULT_TYPE):
             keyboard = [
                 [
                     InlineKeyboardButton(
-                        '\U0001F3AC '+i18n.t("addarr.Movie"),
-                        callback_data=i18n.t("addarr.Movie")
+                        '\U0001F3AC '+i18n.t("addarr.General.Movie"),
+                        callback_data=i18n.t("addarr.General.Movie")
                     ),
                     InlineKeyboardButton(
-                        '\U0001F4FA '+i18n.t("addarr.Series"),
-                        callback_data=i18n.t("addarr.Series")
+                        '\U0001F4FA '+i18n.t("addarr.General.Series"),
+                        callback_data=i18n.t("addarr.General.Series")
                     ),
                 ],
                 [ InlineKeyboardButton(
-                        '\U0001F50D '+i18n.t("addarr.New"),
-                        callback_data=i18n.t("addarr.New")
+                        '\U0001F50D '+i18n.t("addarr.General.New"),
+                        callback_data=i18n.t("addarr.General.New")
                     ),
                 ]
             ]
             markup = InlineKeyboardMarkup(keyboard)
-            msg = await update.message.reply_text(i18n.t("addarr.What is this?"), reply_markup=markup)
+            msg = await update.message.reply_text(i18n.t("addarr.General.WhatIsThis"), reply_markup=markup)
             context.user_data["update_msg"] = msg.message_id
             return MEDIA_DELETE_TYPE
 
@@ -139,7 +139,7 @@ async def storeDeleteMediaType(update : Update, context: ContextTypes.DEFAULT_TY
             logger.info(f'choice: {choice}')
         
         # Prompt user to select the instance
-        service_name = 'radarr' if context.user_data["choice"].lower() == i18n.t("addarr.Movie").lower() else 'sonarr'
+        service_name = 'radarr' if context.user_data["choice"].lower() == i18n.t("addarr.General.Movie").lower() else 'sonarr'
         instances = config[service_name]["instances"] 
 
         if len(instances) == 1:
@@ -164,7 +164,7 @@ async def storeDeleteMediaType(update : Update, context: ContextTypes.DEFAULT_TY
         await context.bot.edit_message_text(
             message_id=context.user_data["update_msg"],
             chat_id=update.effective_message.chat_id,
-            text=i18n.t("addarr.Select an instance"),
+            text=i18n.t("addarr.General.SelectAnInstance"),
             reply_markup=markup,
         )
         
@@ -202,7 +202,7 @@ async def storeMediaInstance(update : Update, context: ContextTypes.DEFAULT_TYPE
     if service_Config.get("adminRestrictions") and not checkAllowed(update, context, "admin"):
         await context.bot.send_message(
             chat_id=update.effective_message.chat_id,
-            text=i18n.t("addarr.NotAdmin"),
+            text=i18n.t("addarr.Authorization.NotAdmin"),
         )
         logger.info(f"User {update.effective_message.chat_id} is not an admin. Delete service terminated. No action taken.")
         return ConversationHandler.END
@@ -223,18 +223,18 @@ async def storeMediaInstance(update : Update, context: ContextTypes.DEFAULT_TYPE
         keyboard = [
                 [
                     InlineKeyboardButton(
-                        '\U00002795 '+i18n.t("addarr.Delete"),
-                        callback_data=i18n.t("addarr.Delete")
+                        '\U00002795 '+i18n.t("addarr.Actions.Delete"),
+                        callback_data=i18n.t("addarr.Actions.Delete")
                     ),
                 ],[
                     InlineKeyboardButton(
-                        '\U000023ED '+i18n.t("addarr.StopDelete"),
-                        callback_data=i18n.t("addarr.StopDelete")
+                        '\U000023ED '+i18n.t("addarr.Actions.StopDelete"),
+                        callback_data=i18n.t("addarr.Actions.StopDelete")
                     ),
                 ],[ 
                     InlineKeyboardButton(
-                        '\U0001F50D '+i18n.t("addarr.New"),
-                        callback_data=i18n.t("addarr.New")
+                        '\U0001F50D '+i18n.t("addarr.General.New"),
+                        callback_data=i18n.t("addarr.General.New")
                     ),
                 ]
             ]
@@ -262,20 +262,20 @@ async def storeMediaInstance(update : Update, context: ContextTypes.DEFAULT_TYPE
         else:
             context.user_data["photo_update_msg"] = img.message_id
 
-        if choice == i18n.t("addarr.Movie"):
-            message=i18n.t("addarr.messages.ThisDelete", subjectWithArticle=i18n.t("addarr.MovieWithArticle").lower())
+        if choice == i18n.t("addarr.General.Movie"):
+            message=i18n.t("addarr.Messages.ThisDelete", subjectWithArticle=i18n.t("addarr.General.MovieWithArticle").lower())
         else:
-            message=i18n.t("addarr.messages.ThisDelete", subjectWithArticle=i18n.t("addarr.SeriesWithArticle").lower())
+            message=i18n.t("addarr.Messages.ThisDelete", subjectWithArticle=i18n.t("addarr.General.SeriesWithArticle").lower())
         msg = await context.bot.send_message(
             chat_id=update.effective_message.chat_id, text=message, reply_markup=markup
         )
         context.user_data["title_update_msg"] = context.user_data["update_msg"]
         context.user_data["update_msg"] = msg.message_id
     else:
-        if choice == i18n.t("addarr.Movie"):
-            message=i18n.t("addarr.messages.NoExist", subjectWithArticle=i18n.t("addarr.MovieWithArticle"))
+        if choice == i18n.t("addarr.General.Movie"):
+            message=i18n.t("addarr.Messages.NoExist", subjectWithArticle=i18n.t("addarr.General.MovieWithArticle"))
         else:
-            message=i18n.t("addarr.messages.NoExist", subjectWithArticle=i18n.t("addarr.SeriesWithArticle"))
+            message=i18n.t("addarr.Messages.NoExist", subjectWithArticle=i18n.t("addarr.General.SeriesWithArticle"))
         await context.bot.edit_message_text(
             message_id=context.user_data["update_msg"],
             chat_id=update.effective_message.chat_id,
@@ -295,15 +295,15 @@ async def deleteMedia(update, context):
     idnumber = context.user_data["output"][position]["id"]
 
     if service.removeFromLibrary(idnumber):
-        if choice == i18n.t("addarr.Movie"):
-            message=i18n.t("addarr.messages.DeleteSuccess", subjectWithArticle=i18n.t("addarr.MovieWithArticle"))
+        if choice == i18n.t("addarr.General.Movie"):
+            message=i18n.t("addarr.Messages.DeleteSuccess", subjectWithArticle=i18n.t("addarr.General.MovieWithArticle"))
         else:
-            message=i18n.t("addarr.messages.DeleteSuccess", subjectWithArticle=i18n.t("addarr.SeriesWithArticle"))
+            message=i18n.t("addarr.Messages.DeleteSuccess", subjectWithArticle=i18n.t("addarr.General.SeriesWithArticle"))
     else:
-        if choice == i18n.t("addarr.Movie"):
-            message=i18n.t("addarr.messages.DeleteFailed", subjectWithArticle=i18n.t("addarr.MovieWithArticle"))
+        if choice == i18n.t("addarr.General.Movie"):
+            message=i18n.t("addarr.Messages.DeleteFailed", subjectWithArticle=i18n.t("addarr.General.MovieWithArticle"))
         else:
-            message=i18n.t("addarr.messages.DeleteFailed", subjectWithArticle=i18n.t("addarr.SeriesWithArticle"))
+            message=i18n.t("addarr.Messages.DeleteFailed", subjectWithArticle=i18n.t("addarr.General.SeriesWithArticle"))
     await context.bot.edit_message_text(
             message_id=context.user_data["update_msg"],
             chat_id=update.effective_message.chat_id,
