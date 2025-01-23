@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import json
 import logging
 import re
 
@@ -34,7 +35,28 @@ logger.debug(f"Addarr v{__version__} starting up...")
 
 MEDIA_AUTHENTICATED, GIVE_MEDIA_TYPE, GIVE_OPTION, GIVE_INSTANCE, GIVE_PATHS, GIVE_QUALITY_PROFILES, SELECT_SEASONS = range (7)
 
-application = Application.builder().token(config["telegram"]["token"]).build()
+
+async def post_init(application: Application) -> None:
+    await application.bot.set_my_commands([('start', 'Starts the bot')])
+
+    commands = [
+        (config["entrypointAuth"].lower(), i18n.t("addarr.Descriptions.Authenticate")),
+        (config["entrypointAdd"].lower(), i18n.t("addarr.Descriptions.Add")),
+        (config["entrypointHelp"].lower(), i18n.t("addarr.Descriptions.Help")),
+        (i18n.t("addarr.Movie").lower(), i18n.t("addarr.Descriptions.Movie")),
+        (i18n.t("addarr.Series").lower(), i18n.t("addarr.Descriptions.Series")),
+        (config["entrypointDelete"].lower(), i18n.t("addarr.Descriptions.Delete")),
+        (config["entrypointAllMovies"].lower(), i18n.t("addarr.Descriptions.AllMovies")),
+        (config["entrypointAllSeries"].lower(), i18n.t("addarr.Descriptions.AllSeries")),
+        (config["entrypointTransmission"].lower(), i18n.t("addarr.Descriptions.Transmission")),
+        (config["entrypointSabnzbd"].lower(), i18n.t("addarr.Descriptions.Sabnzbd")),
+        (config["entrypointqBittorrent"].lower(), i18n.t("addarr.Descriptions.qBittorrent")),
+        (config["entrypointNotify"].lower(), i18n.t("addarr.Descriptions.Notify")),
+    ]
+
+    await application.bot.set_my_commands(commands)
+
+application = Application.builder().token(config["telegram"]["token"]).post_init(post_init).build()
 
 async def startCheck():
     bot = telegram.Bot(token=config["telegram"]["token"])

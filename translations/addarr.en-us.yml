@@ -36,7 +36,7 @@ en-us:
   Notification already added: "You are already subscribed to notifications"
   Creating Notifications: "The notification subscriptions will now be created. You may receive some test notifications."
   Help: "Want to see this text again? Use /%{help}.
-    \n• To authenticate before first use you should use /%{authenticate}.
+    \n• To authenticate before first use you should use /%{authenticate} or /auth password.
     \n• To add a movie or series use /%{add}.
     \n• To delete a movie or series use /%{delete}.
     \n• To immediately add a movie or series you can use /%{movie} or /%{serie}.
@@ -103,3 +103,19 @@ en-us:
     AddFailed: Error when adding the %{subjectWithArticle} %{title} of the user %{first_name} with chat_id %{chat_id}.
     Exist: The %{subjectWithArticle} %{title} that the user %{first_name} with chat_id %{c.hat_id} wanted to add already exists.
     Delete: The user %{first_name} with chat_id %{chat_id} has initiated a new deletion.
+
+  Descriptions:
+    Authenticate: Authorize yourself before first use
+    Add: "Add new media"
+    Help: "Details on commands and bot usage"
+    Movie: "Add a Movie"
+    Series: "Add a TV Show"
+    Delete: "Delete a title"
+    AllMovies: "Show all Movies"
+    AllSeries: "Show all Series"
+    Transmission: "Change Transmission speed"
+    Sabnzbd: "Change Transmission speed"
+    qBittorrent: "Change Transmission speed"
+    Notify: "Get notifications when media is ready"
+
+
