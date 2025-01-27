@@ -238,19 +238,19 @@ def main():
             ],
             GIVE_OPTION: [
                 CallbackQueryHandler(storeSelection, pattern=f'(?i)^({i18n.t("addarr.Actions.Add")})$'),
-                CallbackQueryHandler(prevOption, pattern=f'(?i)^({i18n.t("addarr.SearchResults.PreviousResult")})$'),
-                CallbackQueryHandler(nextOption, pattern=f'(?i)^({i18n.t("addarr.SearchResults.NextResult")})$'),
+                CallbackQueryHandler(prevOption, pattern=f'(?i)^({i18n.t("addarr.General.PreviousResult")})$'),
+                CallbackQueryHandler(nextOption, pattern=f'(?i)^({i18n.t("addarr.General.NextResult")})$'),
                 CallbackQueryHandler(startNewMedia, pattern=f'(?i)^({i18n.t("addarr.General.New")})$'),
                 MessageHandler(
                     filters.Regex(f'(?i)^({i18n.t("addarr.Actions.Add")})$'),
                     storeSelection
                 ),
                 MessageHandler(
-                    filters.Regex(f'(?i)^({i18n.t("addarr.SearchResults.PreviousResult")})$'),
+                    filters.Regex(f'(?i)^({i18n.t("addarr.General.PreviousResult")})$'),
                     prevOption
                 ),
                 MessageHandler(
-                    filters.Regex(f'(?i)^({i18n.t("addarr.SearchResults.NextResult")})$'),
+                    filters.Regex(f'(?i)^({i18n.t("addarr.General.NextResult")})$'),
                     nextOption
                 ),
                 MessageHandler(
@@ -458,11 +458,12 @@ async def startNewMedia(update : Update, context: ContextTypes.DEFAULT_TYPE):
             markup = InlineKeyboardMarkup(keyboard)
 
             if not config.get("update_msg"):
-                await context.bot.send_message(
+                msg = await context.bot.send_message(
                     chat_id=update.effective_message.chat_id, 
                     text=i18n.t("addarr.General.SelectAnInstance"),
                     reply_markup=markup,
                 )
+                context.user_data["update_msg"] = msg.message_id
             else: 
                 await context.bot.edit_message_text(
                     message_id=context.user_data["update_msg"],
@@ -512,12 +513,20 @@ async def startNewMedia(update : Update, context: ContextTypes.DEFAULT_TYPE):
 
             markup = InlineKeyboardMarkup(keyboard)
 
-            await context.bot.edit_message_text(
-                message_id=context.user_data["update_msg"],
-                chat_id=update.effective_message.chat_id,
-                text=i18n.t("addarr.General.SelectAnInstance"),
-                reply_markup=markup,
-            )
+            if not config.get("update_msg"):
+                msg = await context.bot.send_message(
+                    chat_id=update.effective_message.chat_id, 
+                    text=i18n.t("addarr.General.SelectAnInstance"),
+                    reply_markup=markup,
+                )
+                context.user_data["update_msg"] = msg.message_id
+            else: 
+                await context.bot.edit_message_text(
+                    message_id=context.user_data["update_msg"],
+                    chat_id=update.effective_message.chat_id,
+                    text=i18n.t("addarr.General.SelectAnInstance"),
+                    reply_markup=markup,
+                )
 
             return GIVE_INSTANCE
 
@@ -696,13 +705,14 @@ async def storeTitle(update : Update, context: ContextTypes.DEFAULT_TYPE):
 
         markup = InlineKeyboardMarkup(keyboard)
 
-        if not context.user_data.get("update_msg"):
-            await context.bot.send_message(
+        if not config.get("update_msg"):
+            msg = await context.bot.send_message(
                 chat_id=update.effective_message.chat_id, 
                 text=i18n.t("addarr.General.SelectAnInstance"),
                 reply_markup=markup,
             )
-        else:
+            context.user_data["update_msg"] = msg.message_id
+        else: 
             await context.bot.edit_message_text(
                 message_id=context.user_data["update_msg"],
                 chat_id=update.effective_message.chat_id,
@@ -749,13 +759,13 @@ async def storeInstance(update : Update, context: ContextTypes.DEFAULT_TYPE):
         logger.warning("No results found.")
         await context.bot.send_message( 
             chat_id=update.effective_message.chat_id, 
-            text=i18n.t("addarr.searchresults", count=0),
+            text=i18n.t("addarr.SearchResults", count=0),
         )
         clearUserData(context)
         return ConversationHandler.END
 
     context.user_data["output"] = service.giveTitles(searchResult)
-    message=i18n.t("addarr.searchresults", count=len(searchResult))
+    message=i18n.t("addarr.SearchResults", count=len(searchResult))
     message += f"\n\n*{context.user_data['output'][position]['title']} ({context.user_data['output'][position]['year']})*"
     
     if "update_msg" in context.user_data:
@@ -794,15 +804,15 @@ async def storeInstance(update : Update, context: ContextTypes.DEFAULT_TYPE):
     if position > 0:
         prev_next_row.append(
             InlineKeyboardButton(
-                '\U000023EE ' + i18n.t("addarr.SearchResults.PreviousResult"),
-                callback_data=i18n.t("addarr.SearchResults.PreviousResult")
+                '\U000023EE ' + i18n.t("addarr.General.PreviousResult"),
+                callback_data=i18n.t("addarr.General.PreviousResult")
             )
         )
     if position < len(context.user_data["output"]) - 1:
         prev_next_row.append(
             InlineKeyboardButton(
-                '\U000023ED ' + i18n.t("addarr.SearchResults.NextResult"),
-                callback_data=i18n.t("addarr.SearchResults.NextResult")
+                '\U000023ED ' + i18n.t("addarr.General.NextResult"),
+                callback_data=i18n.t("addarr.General.NextResult")
             )
         )
 
@@ -848,7 +858,7 @@ async def nextOption(update: Update, context: ContextTypes.DEFAULT_TYPE):
     searchResult = context.user_data["output"]
     choice = context.user_data["choice"]    
 
-    message=i18n.t("addarr.searchresults", count=len(searchResult))
+    message=i18n.t("addarr.SearchResults", count=len(searchResult))
     message += f"\n\n*{context.user_data['output'][position]['title']} ({context.user_data['output'][position]['year']})*"
 
     await context.bot.edit_message_text(
@@ -872,15 +882,15 @@ async def nextOption(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if position > 0:
         prev_next_row.append(
             InlineKeyboardButton(
-                '\U000023EE ' + i18n.t("addarr.SearchResults.PreviousResult"),
-                callback_data=i18n.t("addarr.SearchResults.PreviousResult")
+                '\U000023EE ' + i18n.t("addarr.General.PreviousResult"),
+                callback_data=i18n.t("addarr.General.PreviousResult")
             )
         )
     if position < len(context.user_data["output"]) - 1:
         prev_next_row.append(
             InlineKeyboardButton(
-                '\U000023ED ' + i18n.t("addarr.SearchResults.NextResult"),
-                callback_data=i18n.t("addarr.SearchResults.NextResult")
+                '\U000023ED ' + i18n.t("addarr.General.NextResult"),
+                callback_data=i18n.t("addarr.General.NextResult")
             )
         )
 
@@ -939,7 +949,7 @@ async def prevOption(update: Update, context: ContextTypes.DEFAULT_TYPE):
     searchResult = context.user_data["output"]
     choice = context.user_data["choice"]    
 
-    message=i18n.t("addarr.searchresults", count=len(searchResult))
+    message=i18n.t("addarr.SearchResults", count=len(searchResult))
     message += f"\n\n*{context.user_data['output'][position]['title']} ({context.user_data['output'][position]['year']})*"
     
     await context.bot.edit_message_text(
@@ -963,15 +973,15 @@ async def prevOption(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if position > 0:
         prev_next_row.append(
             InlineKeyboardButton(
-                '\U000023EE ' + i18n.t("addarr.SearchResults.PreviousResult"),
-                callback_data=i18n.t("addarr.SearchResults.PreviousResult")
+                '\U000023EE ' + i18n.t("addarr.General.PreviousResult"),
+                callback_data=i18n.t("addarr.General.PreviousResult")
             )
         )
     if position < len(context.user_data["output"]) - 1:
         prev_next_row.append(
             InlineKeyboardButton(
-                '\U000023ED ' + i18n.t("addarr.SearchResults.NextResult"),
-                callback_data=i18n.t("addarr.SearchResults.NextResult")
+                '\U000023ED ' + i18n.t("addarr.General.NextResult"),
+                callback_data=i18n.t("addarr.General.NextResult")
             )
         )
 

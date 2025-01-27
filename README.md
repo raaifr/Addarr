@@ -31,8 +31,9 @@ These are the default commands:
 - `/start`: start adding a series or movie to Sonarr/Radarr
 - `/delete`: remove a series or movie from Sonarr/Radarr
 - `/movie` (en-us) - `/film` (nl-be, it-it, de-de, fr-fr) - `/file` (pt-pt) - `/Película` (es-es): start adding a movie to Radarr
+    You can also pass the title after the command: `/movie dory` or the IMDB/TMDB ID: `/movie IMDB:tt29268110`
 - `/series` (en-us) - `/serie` (nl-be, it-it, pt-pt, es-es, de-de, fr-fr) : start adding a series to Sonarr
-    You can also pass the title after the command: `/movie dory`
+    You can also pass the title after the command: `/series jimmy` or the movies TVDB ID: `/series tvdb:270261`
 - `/allSeries`: receive a list of all the series on Sonarr
 - `/allMovies`: receive a list of all the movies on Radarr
 - `/transmission`: change the download/upload speed of Transmission from Temporary Speed Limit to normal or the other way around
