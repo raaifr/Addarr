@@ -20,6 +20,10 @@ fr-fr:
     SelectedAndFutureSeasons: Saisons sélectionnées et futures
     SelectAllSeasons: Sélectionner toutes les saisons
     DeselectAllSeasons: Désélectionner toutes les saisons
+    # Added missing key 'PreviousResult'
+    PreviousResult: Previous
+    # Added missing key 'NextResult'
+    NextResult: Next
 
   Actions:
     Add: Oui, ajoutez ceci
@@ -28,6 +32,12 @@ fr-fr:
     Select: Oui, sélectionnez ceci
     PreviousResult: Résultat précédent  #ADDED
     NextResult: Non, montrez moi le prochain résultat
+    # Added missing key 'SelectedAndFutureSeasons'
+    SelectedAndFutureSeasons: Selected and future seasons
+    # Added missing key 'Select all seasons'
+    Select all seasons: Select all seasons
+    # Added missing key 'DeselectAllSeasons'
+    DeselectAllSeasons: Deselect all seasons
 
   Authorization:
     Authorize: Vous devez d'abord autoriser ce chat. Quel est le mot de passe?
@@ -35,6 +45,12 @@ fr-fr:
     ChatID_Added: "Ce chat a été ajouté avec succès à la liste des chats autorisés. Vous pouvez maintenant commencer à utiliser ce bot. \nSi vous avez entré une commande, vous devez l'exécuter à nouveau."
     NotAdmin: "Vous devez être un administrateur pour exécuter cette commande."
     ChatID_Allowed: "Ce chat est déjà autorisé."
+    # Added missing key 'User_Added'
+    User_Added: The %{username} has been added to the list of allowed chats.
+    # Added missing key 'Accept'
+    Accept: Accept
+    # Added missing key 'Reject'
+    Reject: Reject
 
   Notifications:
     ProfileCreated: Profils de notification créés.  #ADDED
@@ -97,6 +113,8 @@ fr-fr:
     AddFailed: Erreur lors de l'ajout du %{subjectWithArticle} %{title} de l'utilisateur %{first_name} avec chat_id %{chat_id}.
     Exist: Le %{subjectWithArticle} %{titre} que l'utilisateur %{first_name} avec chat_id %{c.hat_id} voulait ajouter existe déjà.
     Delete: L'utilisateur %{first_name} avec chat_id %{chat_id} a initié une nouvelle suppression.
+    # Added missing key 'AuthRequest'
+    AuthRequest: The user %{username} [%{first_name} %{last_name}] with chat_id %{chat_id} has requested access to the bot services.
 
   Help: "
     <b>Commandes Addarr</b>

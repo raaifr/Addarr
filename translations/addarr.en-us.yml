@@ -32,9 +32,12 @@ en-us:
   Authorization:
     Authorize: You first need to authorize this chat. What is the password?
     WrongPassword: You entered the wrong password. Try again...
-    ChatID_Added: This chat is successfully added to the list of allowed chats. Now you can start using this bot. \nIf you entered a command, you need to execute it again.
+    ChatID_Added: Welcome! You have been authorized. \nIf you entered a command, you need to execute it again.
+    User_Added: The %{username} has been added to the list of allowed chats.
     NotAdmin: You need to be an admin to execute this command.
     ChatID_Allowed: This chat is already authorized.
+    Accept: Accept
+    Reject: Reject
   
   Notifications:
     ProfileCreated: Notification profiles created. You will receive notifications when the media you add is downloaded.
@@ -98,6 +101,7 @@ en-us:
     AddFailed: Error when adding the %{subjectWithArticle} %{title} of the user %{first_name} with chat_id %{chat_id}.
     Exist: The %{subjectWithArticle} %{title} that the user %{first_name} with chat_id %{c.hat_id} wanted to add already exists.
     Delete: The user %{first_name} with chat_id %{chat_id} has initiated a new deletion.
+    AuthRequest: The user %{username} [%{first_name} %{last_name}] with chat_id %{chat_id} has requested access to the bot services.
 
   Help: "
     <b><b>Addarr Commands</b></b>
@@ -130,7 +134,7 @@ en-us:
     AllSeries: Show all Series
     Transmission: Change Transmission speed
     Sabnzbd: Change Transmission speed
-    qBittorrent: Change Transmission speed
+    qBittorrent: Change qbittorrent speed
     Notify: Get notifications when media is ready
 
 

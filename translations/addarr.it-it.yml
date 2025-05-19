@@ -20,6 +20,10 @@ it-it:
     SelectedAndFutureSeasons: Stagioni selezionate e future
     SelectAllSeasons: Seleziona tutte le stagioni
     DeselectAllSeasons: Deseleziona tutte le stagioni
+    # Added missing key 'PreviousResult'
+    PreviousResult: Previous
+    # Added missing key 'NextResult'
+    NextResult: Next
 
   Actions:
     Add: Sì, aggiungilo
@@ -28,6 +32,12 @@ it-it:
     Select: Sì, seleziona questo
     PreviousResult: Risultato precedente  #ADDED
     NextResult: No, mostra il prossimo risultato
+    # Added missing key 'SelectedAndFutureSeasons'
+    SelectedAndFutureSeasons: Selected and future seasons
+    # Added missing key 'Select all seasons'
+    Select all seasons: Select all seasons
+    # Added missing key 'DeselectAllSeasons'
+    DeselectAllSeasons: Deselect all seasons
 
   Authorization:
     Authorize: Devi prima autenticare questa chat. Qual'è la password?
@@ -35,6 +45,12 @@ it-it:
     ChatID_Added: "Questa chat è stata aggiunta alla lista delle chat autorizzate. Ora puoi utilizzare il bot. \nSe avevi inviato un comando, dovrai inviarlo di nuovo."
     NotAdmin: "Devi essere un amministratore per eseguire questo comando."
     ChatID_Allowed: "Chat già autorizzata"
+    # Added missing key 'User_Added'
+    User_Added: The %{username} has been added to the list of allowed chats.
+    # Added missing key 'Accept'
+    Accept: Accept
+    # Added missing key 'Reject'
+    Reject: Reject
 
   Notifications:
     ProfileCreated: Profili di notifica creati.  #ADDED
@@ -97,6 +113,8 @@ it-it:
     AddFailed: Errore nell'aggiunta del %{subjectWithArticle} %{title} dell'utente %{first_name} con chat_id %{chat_id}.
     Exist: Il %{subjectWithArticle} %{title} che l'utente %{first_name} con chat_id %{chat_id} voleva aggiungere esiste già.
     Delete: l'utente %{first_name} con chat_id %{chat_id} ha avviato una nuova eliminazione.
+    # Added missing key 'AuthRequest'
+    AuthRequest: The user %{username} [%{first_name} %{last_name}] with chat_id %{chat_id} has requested access to the bot services.
 
   Help: "
     <b>Comandi di Addarr</b>

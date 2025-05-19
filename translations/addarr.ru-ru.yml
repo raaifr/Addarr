@@ -1,4 +1,4 @@
-ru-ru:
+﻿ru-ru:
   General:
     Start: Start
     Stop: Стоп
@@ -19,6 +19,10 @@ ru-ru:
     SelectedAndFutureSeasons: Выбранные и будущие сезоны
     SelectAllSeasons: Выбрать все сезоны
     DeselectAllSeasons: Снять выбор со всех сезонов
+    # Added missing key 'PreviousResult'
+    PreviousResult: Previous
+    # Added missing key 'NextResult'
+    NextResult: Next
 
   Actions:
     Add: Да, это он
@@ -27,6 +31,12 @@ ru-ru:
     Select: Да, выберите это
     PreviousResult: Предыдущий результат  #ADDED
     NextResult: Нет, следующий
+    # Added missing key 'SelectedAndFutureSeasons'
+    SelectedAndFutureSeasons: Selected and future seasons
+    # Added missing key 'Select all seasons'
+    Select all seasons: Select all seasons
+    # Added missing key 'DeselectAllSeasons'
+    DeselectAllSeasons: Deselect all seasons
 
   Authorization:
     Authorize: Сначала вам нужно авторизоваться. Какой пароль?
@@ -34,6 +44,12 @@ ru-ru:
     ChatID_Added: "Этот чат успешно добавлен в список разрешенных чатов. Теперь вы можете начать пользоваться этим ботом."
     NotAdmin: "Вы должны быть администратором, чтобы выполнить эту команду."
     ChatID_Allowed: "Вы уже авторизованы"
+    # Added missing key 'User_Added'
+    User_Added: The %{username} has been added to the list of allowed chats.
+    # Added missing key 'Accept'
+    Accept: Accept
+    # Added missing key 'Reject'
+    Reject: Reject
 
   Notifications:
     ProfileCreated: Профили уведомлений созданы.  #ADDED
@@ -96,6 +112,8 @@ ru-ru:
     AddFailed: Ошибка при добавлении %{subjectWithArticle} %{title} пользователя %{first_name} с chat_id %{chat_id}.
     Exist: Тема %{subjectWithArticle} %{title} , которую хотел добавить пользователь %{first_name} с chat_id %{c.hat_id}, уже существует.
     Delete: Пользователь %{first_name} с chat_id %{chat_id} инициировал новое удаление.
+    # Added missing key 'AuthRequest'
+    AuthRequest: The user %{username} [%{first_name} %{last_name}] with chat_id %{chat_id} has requested access to the bot services.
 
   Help: "
     <b>Команды Addarr</b>

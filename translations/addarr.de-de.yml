@@ -20,6 +20,10 @@ de-de:
     SelectedAndFutureSeasons: Ausgewählte und zukünftige Staffeln
     SelectAllSeasons: Alle Staffeln auswählen
     DeselectAllSeasons: Alle Staffeln abwählen
+    # Added missing key 'PreviousResult'
+    PreviousResult: Previous
+    # Added missing key 'NextResult'
+    NextResult: Next
 
   Actions:
     Add: Ja, hinzufügen
@@ -28,6 +32,12 @@ de-de:
     Select: Ja, auswählen
     PreviousResult: Vorheriges Ergebnis  #ADDED
     NextResult: Nein, zeige mir das nächste Ergebnis
+    # Added missing key 'SelectedAndFutureSeasons'
+    SelectedAndFutureSeasons: Selected and future seasons
+    # Added missing key 'Select all seasons'
+    Select all seasons: Select all seasons
+    # Added missing key 'DeselectAllSeasons'
+    DeselectAllSeasons: Deselect all seasons
 
   Authorization:
     Authorize: Dieser Chat muss noch autorisiert werden. Wie ist dein Passwort?
@@ -35,6 +45,12 @@ de-de:
     ChatID_Added: "Dieser Chat wurde zur autorisierten liste hinzugefügt. Nun kannst du den Bot benutzen. \nBefehle müssen erneut ausgeführt werden."
     NotAdmin: "Du musst ein Admin sein um diesen Befehl zu benutzen."
     ChatID_Allowed: "Dieser Chat ist bereits autorisiert."
+    # Added missing key 'User_Added'
+    User_Added: The %{username} has been added to the list of allowed chats.
+    # Added missing key 'Accept'
+    Accept: Accept
+    # Added missing key 'Reject'
+    Reject: Reject
 
   Notifications:
     ProfileCreated: Benachrichtigungsprofile erstellt.  #ADDED
@@ -97,6 +113,8 @@ de-de:
     AddFailed: "Hinzufügen von \"%{title}\" für %{first_name} (%{chat_id}): Fehlgeschlagen."
     Exist: "Hinzufügen von Element \"%{title}\" für %{first_name} (%{chat_id}): Existiert bereits."
     Delete: Der Benutzer %{first_name} (%{chat_id}) hat \"%{title}\" gelöscht.
+    # Added missing key 'AuthRequest'
+    AuthRequest: The user %{username} [%{first_name} %{last_name}] with chat_id %{chat_id} has requested access to the bot services.
 
   Help: "
     <b>Addarr-Befehle</b>
