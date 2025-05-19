@@ -20,6 +20,10 @@ es-es:
     SelectedAndFutureSeasons: Temporadas seleccionadas y futuras
     SelectAllSeasons: Seleccionar todas las temporadas
     DeselectAllSeasons: Deseleccionar todas las temporadas
+    # Added missing key 'PreviousResult'
+    PreviousResult: Previous
+    # Added missing key 'NextResult'
+    NextResult: Next
 
   Actions:
     Add: Si, añadir
@@ -28,6 +32,12 @@ es-es:
     Select: Si, selecciona esto
     PreviousResult: Resultado anterior  #ADDED
     NextResult: No, muestrame el siguiente resultado
+    # Added missing key 'SelectedAndFutureSeasons'
+    SelectedAndFutureSeasons: Selected and future seasons
+    # Added missing key 'Select all seasons'
+    Select all seasons: Select all seasons
+    # Added missing key 'DeselectAllSeasons'
+    DeselectAllSeasons: Deselect all seasons
 
   Authorization:
     Authorize: Necesitas autorizar este chat primero. ¿Cuál es la contraseña?
@@ -35,6 +45,12 @@ es-es:
     ChatID_Added: "Este chat ha sido autorizado correctamente. Ya puedes utilizar el bot."
     NotAdmin: "Necesitas ser admin para ejecutar este comando."
     ChatID_Allowed: "Este chat ya esta autorizado."
+    # Added missing key 'User_Added'
+    User_Added: The %{username} has been added to the list of allowed chats.
+    # Added missing key 'Accept'
+    Accept: Accept
+    # Added missing key 'Reject'
+    Reject: Reject
 
   Notifications:
     ProfileCreated: Perfiles de notificación creados.  #ADDED
@@ -97,6 +113,8 @@ es-es:
     AddFailed: Error al añadir la %{subjectWithArticle} %{title} del usuario %{first_name} con chat_id %{chat_id}.
     Exist: La %{subjectWithArticle} %{title} que queria añadir el usuario %{first_name} con chat_id %{chat_id} ya existe.
     Delete: El usuario %{first_name} con chat_id %{chat_id} ha iniciado una nueva eliminación.
+    # Added missing key 'AuthRequest'
+    AuthRequest: The user %{username} [%{first_name} %{last_name}] with chat_id %{chat_id} has requested access to the bot services.
 
   Help: "
     <b>Comandos de Addarr</b>

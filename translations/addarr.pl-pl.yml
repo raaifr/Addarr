@@ -20,6 +20,10 @@ pl-pl:
     SelectedAndFutureSeasons: Wybrane i przyszłe sezony
     SelectAllSeasons: Wybierz wszystkie sezony
     DeselectAllSeasons: Odznacz wszystkie sezony
+    # Added missing key 'PreviousResult'
+    PreviousResult: Previous
+    # Added missing key 'NextResult'
+    NextResult: Next
 
   Actions:
     Add: Tak, chcę to!
@@ -28,6 +32,12 @@ pl-pl:
     Select: Wybierz: Tak, wybierz to
     PreviousResult: Poprzedni wynik  #ADDED
     NextResult: Próbuj dalej
+    # Added missing key 'SelectedAndFutureSeasons'
+    SelectedAndFutureSeasons: Selected and future seasons
+    # Added missing key 'Select all seasons'
+    Select all seasons: Select all seasons
+    # Added missing key 'DeselectAllSeasons'
+    DeselectAllSeasons: Deselect all seasons
 
   Authorization:
     Authorize: Musisz zautoryzować ten czat. Jakie jest hasło?
@@ -35,6 +45,12 @@ pl-pl:
     ChatID_Added: "Ten czat został dodany do whitelisty. Teraz możesz używać tego bota."
     NotAdmin: "Nie jesteś uprawniony do wykonania tej komendy!"
     ChatID_Allowed: "Ten czat już jest zautoryzowany."
+    # Added missing key 'User_Added'
+    User_Added: The %{username} has been added to the list of allowed chats.
+    # Added missing key 'Accept'
+    Accept: Accept
+    # Added missing key 'Reject'
+    Reject: Reject
 
   Notifications:
     ProfileCreated: Profile powiadomień utworzone.  #ADDED
@@ -97,6 +113,8 @@ pl-pl:
     AddFailed: Błąd dodawania %{subjectWithArticle} %{title} użytkownika %{first_name} z chat_id %{chat_id}.
     Exist: Artykuł %{subjectWithArticle} %{title}, który chciał dodać użytkownik %{first_name} with chat_id %{chat_id} już istnieje.
     Delete: Użytkownik %{first_name} z identyfikatorem chat_id %{chat_id} zainicjował nowe usunięcie.
+    # Added missing key 'AuthRequest'
+    AuthRequest: The user %{username} [%{first_name} %{last_name}] with chat_id %{chat_id} has requested access to the bot services.
 
   Help: "
     <b>Komendy Addarr</b>

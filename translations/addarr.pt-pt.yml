@@ -20,6 +20,10 @@ pt-pt:
     SelectedAndFutureSeasons: Temporadas selecionadas e futuras  #Fixed structure
     SelectAllSeasons: Selecionar todas as temporadas
     DeselectAllSeasons: Deselecionar todas as temporadas
+    # Added missing key 'PreviousResult'
+    PreviousResult: Previous
+    # Added missing key 'NextResult'
+    NextResult: Next
 
   Actions:
     Add: Sim, adicione este
@@ -28,6 +32,12 @@ pt-pt:
     Select: Sim, seleccione isto
     PreviousResult: Resultado anterior  #ADDED
     NextResult: Não, mostre-me o resultado seguinte
+    # Added missing key 'SelectedAndFutureSeasons'
+    SelectedAndFutureSeasons: Selected and future seasons
+    # Added missing key 'Select all seasons'
+    Select all seasons: Select all seasons
+    # Added missing key 'DeselectAllSeasons'
+    DeselectAllSeasons: Deselect all seasons
 
   Authorization:
     Authorize: Primeiro tem de autorizar este chat. Indique a password
@@ -35,6 +45,12 @@ pt-pt:
     ChatID_Added: "Este chat foi adicionado à lista de chats autorizados. Pode agora utilizar este bot.\nSe introduziu um comando, deverá executá-lo novamente."
     NotAdmin: "Precisa de ser um admin para executar este comando"
     ChatID_Allowed: "Este chat já foi autorizado."
+    # Added missing key 'User_Added'
+    User_Added: The %{username} has been added to the list of allowed chats.
+    # Added missing key 'Accept'
+    Accept: Accept
+    # Added missing key 'Reject'
+    Reject: Reject
 
   Notifications:
     ProfileCreated: Perfis de notificação criados.  #ADDED
@@ -97,6 +113,8 @@ pt-pt:
     AddFailed: Erro ao adicionar o %{subjectWithArticle} %{title} do utilizador %{first_name} com chat_id %{chat_id}.
     Exist: O %{subjectWithArticle} %{title} que o utilizador %{first_name} com chat_id %{chat_id} queria adicionar já existe.
     Delete: O utilizador %{first_name} com o chat_id %{chat_id} iniciou uma nova eliminação.
+    # Added missing key 'AuthRequest'
+    AuthRequest: The user %{username} [%{first_name} %{last_name}] with chat_id %{chat_id} has requested access to the bot services.
 
   Help: "
     <b>Comandos do Addarr</b>
