@@ -1,4 +1,4 @@
-﻿ru-ru:
+ru-ru:
   General:
     Start: Start
     Stop: Стоп
@@ -28,28 +28,20 @@
     Add: Да, это он
     Delete: Да, его удалить
     StopDelete: Нет, я не хочу его удалять
-    Select: Да, выберите это
-    PreviousResult: Предыдущий результат  #ADDED
-    NextResult: Нет, следующий
-    # Added missing key 'SelectedAndFutureSeasons'
-    SelectedAndFutureSeasons: Selected and future seasons
-    # Added missing key 'Select all seasons'
-    Select all seasons: Select all seasons
-    # Added missing key 'DeselectAllSeasons'
-    DeselectAllSeasons: Deselect all seasons
+    Select: Да, выбрать это
+    SelectedAndFutureSeasons: Выбранные и будущие сезоны
+    SelectAllSeasons: Выбрать все сезоны
+    DeselectAllSeasons: Снять выбор с всех сезонов
 
   Authorization:
-    Authorize: Сначала вам нужно авторизоваться. Какой пароль?
-    WrongPassword: Вы ввели неверный пароль. Попробуйте снова...
-    ChatID_Added: "Этот чат успешно добавлен в список разрешенных чатов. Теперь вы можете начать пользоваться этим ботом."
-    NotAdmin: "Вы должны быть администратором, чтобы выполнить эту команду."
-    ChatID_Allowed: "Вы уже авторизованы"
-    # Added missing key 'User_Added'
-    User_Added: The %{username} has been added to the list of allowed chats.
-    # Added missing key 'Accept'
-    Accept: Accept
-    # Added missing key 'Reject'
-    Reject: Reject
+    Authorize: Сначала нужно авторизоваться. Какой пароль?
+    WrongPassword: Неверный пароль. Попробуйте снова...
+    ChatID_Added: Этот чат успешно добавлен в список авторизованных чатов. Теперь вы можете начать пользоваться ботом. \nЕсли вы уже вводили какую-то команду - введите её ещё раз.
+    NotAdmin: Для этой команды нужны права администратора.
+    ChatID_Allowed: Этот чат уже авторизован.
+    User_Added: Пользователь %{username} был добавлен в список разрешённых чатов.
+    Accept: Принять
+    Reject: Отклонить
 
   Notifications:
     ProfileCreated: Профили уведомлений созданы.  #ADDED
@@ -106,14 +98,13 @@
     Error: Ошибка при установке ограничения скорости
 
   AdminNotifications:
-    Stop: Пользователь %{first_name} с chat_id %{chat_id} остановил процесс.
-    Start: Пользователь %{first_name} с chat_id %{chat_id} начал новый запрос.
-    AddSuccess: Запрос %{subjectWithArticle} %{title} пользователя %{first_name} с chat_id %{chat_id} была добавлена.
-    AddFailed: Ошибка при добавлении %{subjectWithArticle} %{title} пользователя %{first_name} с chat_id %{chat_id}.
-    Exist: Тема %{subjectWithArticle} %{title} , которую хотел добавить пользователь %{first_name} с chat_id %{c.hat_id}, уже существует.
-    Delete: Пользователь %{first_name} с chat_id %{chat_id} инициировал новое удаление.
-    # Added missing key 'AuthRequest'
-    AuthRequest: The user %{username} [%{first_name} %{last_name}] with chat_id %{chat_id} has requested access to the bot services.
+    Stop: Пользователь %{first_name} в чате %{chat_id} остановил процесс.
+    Start: Пользователь %{first_name} в чате %{chat_id} запустил новый запрос.
+    AddSuccess:  %{subjectWithArticle} %{title} был добавлен пользователем %{first_name} в чате %{chat_id}.
+    AddFailed: Ошибка в процесе добавления %{subjectWithArticle} %{title} пользователем %{first_name} в чате %{chat_id}.
+    Exist: %{subjectWithArticle} %{title} который пользователь %{first_name} в чате %{chat_id} пытается добавить уже существует.
+    Delete: Пользователь %{first_name} в чате %{chat_id} начал процесс удаления.
+    AuthRequest: Пользователь %{username} [%{first_name} %{last_name}] в чате %{chat_id} запросил доступ к сервисам бота.
 
   Help: "
     <b>Команды Addarr</b>

@@ -26,7 +26,7 @@ en-us:
     StopDelete: No, I don't want to delete this
     Select: Yes, select this
     SelectedAndFutureSeasons: Selected and future seasons
-    Select all seasons: Select all seasons
+    SelectAllSeasons: Select all seasons
     DeselectAllSeasons: Deselect all seasons
 
   Authorization:
@@ -99,7 +99,7 @@ en-us:
     Start: The user %{first_name} with chat_id %{chat_id} has started a new request.
     AddSuccess: The %{subjectWithArticle} %{title} of user %{first_name} with chat_id %{chat_id} has been added.
     AddFailed: Error when adding the %{subjectWithArticle} %{title} of the user %{first_name} with chat_id %{chat_id}.
-    Exist: The %{subjectWithArticle} %{title} that the user %{first_name} with chat_id %{c.hat_id} wanted to add already exists.
+    Exist: The %{subjectWithArticle} %{title} that the user %{first_name} with chat_id %{chat_id} wanted to add already exists.
     Delete: The user %{first_name} with chat_id %{chat_id} has initiated a new deletion.
     AuthRequest: The user %{username} [%{first_name} %{last_name}] with chat_id %{chat_id} has requested access to the bot services.
 
@@ -133,7 +133,7 @@ en-us:
     AllMovies: Show all Movies
     AllSeries: Show all Series
     Transmission: Change Transmission speed
-    Sabnzbd: Change Transmission speed
+    Sabnzbd: Change Sabnzbd  speed
     qBittorrent: Change qbittorrent speed
     Notify: Get notifications when media is ready
 

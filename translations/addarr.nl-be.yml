@@ -1,4 +1,4 @@
-# nl-BE Dutch (Belgium)
+﻿# nl-BE Dutch (Belgium)
 nl-be:
   General:
     Start: Start
@@ -17,27 +17,17 @@ nl-be:
     SelectAPath: Kies een pad voor deze film of serie
     SelectAQuality: Kies een kwaliteitsprofiel voor de film of serie
     SelectFromWhichSeason: Vanaf welk seizoen?
-    SelectedAndFutureSeasons: Geselecteerde en toekomstige seizoenen
-    SelectAllSeasons: Selecteer alle seizoenen
-    DeselectAllSeasons: Deselecteer alle seizoenen
-    # Added missing key 'PreviousResult'
-    PreviousResult: Previous
-    # Added missing key 'NextResult'
-    NextResult: Next
+    PreviousResult: Vorige  #ADDED
+    NextResult: Volgende  #ADDED
 
   Actions:
     Add: Ja, voeg deze toe
     Delete: Ja, verwijder deze
     StopDelete: No, ik wil dit niet verwijderen
     Select: Ja, selecteer dit
-    PreviousResult: Vorig resultaat  #ADDED
-    NextResult: Nee, toon me volgend resultaat
-    # Added missing key 'SelectedAndFutureSeasons'
-    SelectedAndFutureSeasons: Selected and future seasons
-    # Added missing key 'Select all seasons'
-    Select all seasons: Select all seasons
-    # Added missing key 'DeselectAllSeasons'
-    DeselectAllSeasons: Deselect all seasons
+    SelectedAndFutureSeasons: Geselecteerde en toekomstige seizoenen  #ADDED
+    SelectAllSeasons: Alle seizoenen selecteren  #ADDED
+    DeselectAllSeasons: Alle seizoenen deselecteren  #ADDED
 
   Authorization:
     Authorize: Je moet eerst deze chat toestemming geven. Wat is het wachtwoord?
@@ -45,17 +35,14 @@ nl-be:
     ChatID_Added: "Deze chat is succesvol toegevoegd aan de lijst met toegestane chats. Nu kan je deze bot gebruiken. \nAls je een commando had ingegeven, moet je deze opnieuw uitvoeren."
     NotAdmin: "Je moet administrator zijn vooraleer je dit commando kunt uitvoeren."
     ChatID_Allowed: "Deze chat heeft al toestemming."
-    # Added missing key 'User_Added'
-    User_Added: The %{username} has been added to the list of allowed chats.
-    # Added missing key 'Accept'
-    Accept: Accept
-    # Added missing key 'Reject'
-    Reject: Reject
+    User_Added: De gebruiker %{username} is toegevoegd aan de lijst met toegestane chats.  #ADDED
+    Accept: Accepteren  #ADDED
+    Reject: Weigeren  #ADDED
 
-  Notifications:
-    ProfileCreated: Notificatieprofielen aangemaakt.  #ADDED
-    ProfileExists: Je bent al geabonneerd op notificaties.  #ADDED
-    CreatingProfiles: Notificatie-abonnementen worden nu aangemaakt.  #ADDED
+  Notifications: #ADDED
+    ProfileCreated: Notificatieprofielen aangemaakt.
+    ProfileExists: Je bent al geabonneerd op notificaties.
+    CreatingProfiles: Notificatie-abonnementen worden nu aangemaakt.
 
   Messages:
     Add: Ja, voeg deze %{subject} toe
@@ -76,7 +63,6 @@ nl-be:
     zero: "Er zijn geen resultaten gevonden."
     one: Een zoekresultaat
     other: "%{count} zoekresultaten"
-    PreviousResult: Vorig resultaat  #ADDED
 
   Transmission:
     NotEnabled: "De Transmission functie is niet geactiveerd."
@@ -113,25 +99,27 @@ nl-be:
     AddFailed: Fout bij het toevoegen van het %{subjectWithArticle} %{title} van de gebruiker %{first_name} met chat_id %{chat_id}.
     Exist: Het %{subjectWithArticle} %{title} dat de gebruiker %{first_name} met chat_id %{chat_id} wilde toevoegen bestaat al.
     Delete: De gebruiker %{first_name} met chat_id %{chat_id} heeft een nieuwe verwijdering geïnitieerd.
-    # Added missing key 'AuthRequest'
-    AuthRequest: The user %{username} [%{first_name} %{last_name}] with chat_id %{chat_id} has requested access to the bot services.
-
+    AuthRequest: Gebruiker %{username} [%{first_name} %{last_name}] met chat-ID %{chat_id} heeft toegang tot de botdiensten aangevraagd.  #ADDED
+  
+  #ADDED
   Help: "
-    <b>Addarr-commando's</b>
-    \n<i>Wil je deze tekst opnieuw zien? Gebruik /%{help}</i>
-    \n• Om de eerste keer te authenticeren gebruik je /%{authenticate} [wachtwoord].
-    \n• Om een film of serie toe te voegen kun je /%{add} gebruiken.
-    \n• Om een serie of film te verwijderen gebruikt u /%{delete}.
-    \n• Om te kijken welke series al in Sonarr zitten, gebruik je /%{allSeries}.
-    \n• Om te kijken welke films al in Radarr zitten, gebruik je /%{allMovies}.
-    \n\n<b>Eenregelige commando's</b>
+    <b><b>Addarr-commando's</b></b>
+    \n<i>Deze tekst opnieuw zien? Gebruik /%{help}</i>\n
+    \n• Eerst authenticeren:
+        Gebruik /%{authenticate} [wachtwoord]
+    \n• Toevoegen: /%{add}.
+    \n• Verwijderen: /%{delete}.
+    \n• Lijst series in Sonarr: /%{allSeries}.
+    \n• Lijst films in Radarr: /%{allMovies}.
+    \n\n<b>Snelle commando's</b>
     \n• Direct toevoegen: /%{movie} of /%{serie}.
-    \n  Bijvoorbeeld: %{movie} Superman of %{serie} Temptation Island.
-    \n\n<b>Downloadclient-instellingen</b>
+    \n  Bijv: %{movie} Superman of %{serie} House.
+    \n\n<b>Downloadclients</b>
     \n• Transmission-snelheid: /%{transmission}.
     \n• Sabnzbd-snelheid: /%{sabnzbd}.
     \n• qBittorrent-snelheid: /%{qbittorrent}.
-    \n\nVoor meldingen wanneer media klaar is: /%{notify}."
+    \n\n
+    Meldingen bij gereed media: /%{notify}."
 
   CommandDescriptions:  #ADDED
     Authenticate: Authenticatie voor eerste gebruik

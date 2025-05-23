@@ -1,4 +1,4 @@
-# de-DE German (Germany)
+﻿# de-DE German (Germany)
 de-de:
   General:
     Start: Start
@@ -17,27 +17,17 @@ de-de:
     SelectAPath: Bitte wähle einen Pfad für die Serie oder den Film
     SelectAQuality: Bitte wähle ein Qualitätsprofil
     SelectFromWhichSeason: Ab welcher Staffel?
-    SelectedAndFutureSeasons: Ausgewählte und zukünftige Staffeln
-    SelectAllSeasons: Alle Staffeln auswählen
-    DeselectAllSeasons: Alle Staffeln abwählen
-    # Added missing key 'PreviousResult'
-    PreviousResult: Previous
-    # Added missing key 'NextResult'
-    NextResult: Next
+    PreviousResult: Zurück  #ADDED
+    NextResult: Weiter  #ADDED
 
   Actions:
     Add: Ja, hinzufügen
     Delete: Ja, löschen
     StopDelete: Nein, nicht löschen
     Select: Ja, auswählen
-    PreviousResult: Vorheriges Ergebnis  #ADDED
-    NextResult: Nein, zeige mir das nächste Ergebnis
-    # Added missing key 'SelectedAndFutureSeasons'
-    SelectedAndFutureSeasons: Selected and future seasons
-    # Added missing key 'Select all seasons'
-    Select all seasons: Select all seasons
-    # Added missing key 'DeselectAllSeasons'
-    DeselectAllSeasons: Deselect all seasons
+    SelectedAndFutureSeasons: Ausgewählte und zukünftige Staffeln  #ADDED
+    SelectAllSeasons: Alle Staffeln auswählen  #ADDED
+    DeselectAllSeasons: Alle Staffeln abwählen  #ADDED
 
   Authorization:
     Authorize: Dieser Chat muss noch autorisiert werden. Wie ist dein Passwort?
@@ -45,17 +35,14 @@ de-de:
     ChatID_Added: "Dieser Chat wurde zur autorisierten liste hinzugefügt. Nun kannst du den Bot benutzen. \nBefehle müssen erneut ausgeführt werden."
     NotAdmin: "Du musst ein Admin sein um diesen Befehl zu benutzen."
     ChatID_Allowed: "Dieser Chat ist bereits autorisiert."
-    # Added missing key 'User_Added'
-    User_Added: The %{username} has been added to the list of allowed chats.
-    # Added missing key 'Accept'
-    Accept: Accept
-    # Added missing key 'Reject'
-    Reject: Reject
+    User_Added: Der Benutzer %{username} wurde zur Liste der zugelassenen Chats hinzugefügt.  #ADDED
+    Accept: Akzeptieren  #ADDED
+    Reject: Ablehnen  #ADDED
 
-  Notifications:
-    ProfileCreated: Benachrichtigungsprofile erstellt.  #ADDED
-    ProfileExists: Du erhältst bereits Benachrichtigungen.  #ADDED
-    CreatingProfiles: Benachrichtigungsabonnements werden jetzt erstellt.  #ADDED
+  Notifications:  #ADDED
+    ProfileCreated: Benachrichtigungsprofile erstellt.
+    ProfileExists: Du erhältst bereits Benachrichtigungen.
+    CreatingProfiles: Benachrichtigungsabonnements werden jetzt erstellt.
 
   Messages:
     Add: Ja hinzufügen
@@ -76,7 +63,6 @@ de-de:
     zero: Es wurden keine Ergebnisse gefunden
     one: Ein Ergebnis gefunden
     other: "%{count} Ergebnisse gefunden"
-    PreviousResult: Vorheriges Ergebnis  #ADDED
 
   Transmission:
     NotEnabled: "Die Transmission-Funktion ist nicht aktiviert."
@@ -113,25 +99,27 @@ de-de:
     AddFailed: "Hinzufügen von \"%{title}\" für %{first_name} (%{chat_id}): Fehlgeschlagen."
     Exist: "Hinzufügen von Element \"%{title}\" für %{first_name} (%{chat_id}): Existiert bereits."
     Delete: Der Benutzer %{first_name} (%{chat_id}) hat \"%{title}\" gelöscht.
-    # Added missing key 'AuthRequest'
-    AuthRequest: The user %{username} [%{first_name} %{last_name}] with chat_id %{chat_id} has requested access to the bot services.
-
+    AuthRequest: Der Benutzer %{username} [%{first_name} %{last_name}] mit der Chat-ID %{chat_id} hat Zugriff auf die Bot-Dienste angefordert.   #ADDED
+    
+  #ADDED
   Help: "
-    <b>Addarr-Befehle</b>
-    \n<i>Um diesen Text erneut zu sehen, benutze /%{help}</i>
-    \n• Zur Authentifizierung benutze /%{authenticate} [Passwort].
-    \n• Um einen Film oder eine Serie hinzuzufügen, benutze /%{add}.
-    \n• Um eine Serie oder einen Film zu löschen, verwenden Sie /%{delete}.
-    \n• Um alle Serien in Sonarr anzuzeigen, benutze /%{allSeries}.
-    \n• Um alle Filme in Radarr anzuzeigen, benutze /%{allMovies}.
+    <b><b>Addarr-Befehle</b></b>
+    \n<i>Diesen Text erneut anzeigen? Verwenden Sie /%{help}</i>\n
+    \n• Sie müssen sich vor der ersten Nutzung autorisieren.
+        Verwenden Sie /%{authenticate} [Passwort]
+    \n• Um einen Film oder eine Serie hinzuzufügen, verwenden Sie /%{add}.
+    \n• Um einen Film oder eine Serie zu löschen, verwenden Sie /%{delete}.
+    \n• Um Serien in Sonarr aufzulisten, verwenden Sie /%{allSeries}.
+    \n• Um Filme in Radarr aufzulisten, verwenden Sie /%{allMovies}.
     \n\n<b>Einzeilige Befehle</b>
-    \n• Direkt hinzufügen: /%{movie} oder /%{serie}.
-    \n  Beispiel: %{movie} Superman oder %{serie} Haus des Geldes.
+    \n• Um sofort einen Film oder eine Serie hinzuzufügen, können Sie /%{movie} oder /%{serie} verwenden.
+    \n  z.B. %{movie} Superman oder %{serie} House.
     \n\n<b>Download-Client-Einstellungen</b>
-    \n• Transmission-Geschwindigkeit: /%{transmission}.
-    \n• Sabnzbd-Geschwindigkeit: /%{sabnzbd}.
-    \n• qBittorrent-Geschwindigkeit: /%{qbittorrent}.
-    \n\nFür Benachrichtigungen bei fertigen Medien: /%{notify}."
+    \n• Um die Upload- und Download-Geschwindigkeit von Transmission umzuschalten, verwenden Sie /%{transmission}.
+    \n• Um die Upload- und Download-Geschwindigkeit von Sabnzbd zu ändern, verwenden Sie /%{sabnzbd}.
+    \n• Um die Upload- und Download-Geschwindigkeit von qBittorrent zu ändern, verwenden Sie /%{qbittorrent}.
+    \n\n
+    Wenn Sie benachrichtigt werden möchten, wenn Ihre Medien bereit zum Ansehen sind, verwenden Sie /%{notify}."
 
   CommandDescriptions:  #ADDED
     Authenticate: Vor der ersten Nutzung autorisieren
