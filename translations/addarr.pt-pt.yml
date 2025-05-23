@@ -1,4 +1,4 @@
-# pt-PT Portuguese (Portugal)
+﻿# pt-PT Portuguese (Portugal)
 pt-pt:
   General:
     Start: Início
@@ -17,27 +17,17 @@ pt-pt:
     SelectAPath: Seleccione um caminho para o filme ou série
     SelectAQuality: Por favor, seleccione um perfil de qualidade para o filme ou série
     SelectFromWhichSeason: A partir de que temporada?
-    SelectedAndFutureSeasons: Temporadas selecionadas e futuras  #Fixed structure
-    SelectAllSeasons: Selecionar todas as temporadas
-    DeselectAllSeasons: Deselecionar todas as temporadas
-    # Added missing key 'PreviousResult'
-    PreviousResult: Previous
-    # Added missing key 'NextResult'
-    NextResult: Next
+    PreviousResult: Anterior  #ADDED
+    NextResult: Seguinte  #ADDED
 
   Actions:
     Add: Sim, adicione este
     Delete: Sim, apagar isto
     StopDelete: Não, não quero apagar isto
     Select: Sim, seleccione isto
-    PreviousResult: Resultado anterior  #ADDED
-    NextResult: Não, mostre-me o resultado seguinte
-    # Added missing key 'SelectedAndFutureSeasons'
-    SelectedAndFutureSeasons: Selected and future seasons
-    # Added missing key 'Select all seasons'
-    Select all seasons: Select all seasons
-    # Added missing key 'DeselectAllSeasons'
-    DeselectAllSeasons: Deselect all seasons
+    SelectedAndFutureSeasons: Temporadas selecionadas e futuras  #ADDED
+    SelectAllSeasons: Selecionar todas as temporadas  #ADDED
+    DeselectAllSeasons: Desselecionar todas as temporadas  #ADDED
 
   Authorization:
     Authorize: Primeiro tem de autorizar este chat. Indique a password
@@ -45,17 +35,14 @@ pt-pt:
     ChatID_Added: "Este chat foi adicionado à lista de chats autorizados. Pode agora utilizar este bot.\nSe introduziu um comando, deverá executá-lo novamente."
     NotAdmin: "Precisa de ser um admin para executar este comando"
     ChatID_Allowed: "Este chat já foi autorizado."
-    # Added missing key 'User_Added'
-    User_Added: The %{username} has been added to the list of allowed chats.
-    # Added missing key 'Accept'
-    Accept: Accept
-    # Added missing key 'Reject'
-    Reject: Reject
+    User_Added: O utilizador %{username} foi adicionado à lista de chats permitidos.  #ADDED
+    Accept: Aceitar  #ADDED
+    Reject: Rejeitar  #ADDED
 
-  Notifications:
-    ProfileCreated: Perfis de notificação criados.  #ADDED
-    ProfileExists: Já está subscrito a notificações.  #ADDED
-    CreatingProfiles: As subscrições de notificação serão agora criadas.  #ADDED
+  Notifications:  #ADDED
+    ProfileCreated: Perfis de notificação criados.
+    ProfileExists: Já está subscrito a notificações.
+    CreatingProfiles: As subscrições de notificação serão agora criadas.
 
   Messages:
     Add: Sim, adicione este %{subject}
@@ -76,7 +63,6 @@ pt-pt:
     zero: Não foram encontrados resultados
     one: Foi encontrado um resultado
     other: "Foram encontrados %{count} resultados"
-    PreviousResult: Resultado anterior  #ADDED
 
   Transmission:
     NotEnabled: "A funcionalidade do Transmission não está activada."
@@ -97,7 +83,7 @@ pt-pt:
     ChangedTo100: Sem limite definido
     Error: Algo correu mal a definir o limite.
 
-  qBittorrent:  #ADDED SECTION
+  qBittorrent:  #ADDED
     NotEnabled: A funcionalidade do qBittorrent não está ativada.
     Speed: Que velocidade pretende que o qBittorrent use?
     Alternate: Limite de velocidade alternativo
@@ -113,25 +99,27 @@ pt-pt:
     AddFailed: Erro ao adicionar o %{subjectWithArticle} %{title} do utilizador %{first_name} com chat_id %{chat_id}.
     Exist: O %{subjectWithArticle} %{title} que o utilizador %{first_name} com chat_id %{chat_id} queria adicionar já existe.
     Delete: O utilizador %{first_name} com o chat_id %{chat_id} iniciou uma nova eliminação.
-    # Added missing key 'AuthRequest'
-    AuthRequest: The user %{username} [%{first_name} %{last_name}] with chat_id %{chat_id} has requested access to the bot services.
+    AuthRequest:  O utilizador %{username} [%{first_name} %{last_name}] com ID de chat %{chat_id} solicitou acesso aos serviços do bot.   #ADDED
 
+  #ADDED
   Help: "
-    <b>Comandos do Addarr</b>
-    \n<i>Para ver este texto novamente escreva /%{help}.</i>
-    \n• Para autenticar antes da primeira utilização deve escrever /%{authenticate} [password].
-    \n• Para adicionar um filme ou série escreva /%{add}.
-    \n• Para apagar uma série ou filme use /%{delete}.
-    \n• Para ver séries no Sonarr: /%{allSeries}.
-    \n• Para ver filmes no Radarr: /%{allMovies}.
-    \n\n<b>Comandos de uma linha</b>
-    \n• Adicionar diretamente: /%{movie} ou /%{serie}.
-    \n  Exemplo: %{movie} Superman ou %{serie} Casa do Dragão.
-    \n\n<b>Definições de cliente de download</b>
-    \n• Velocidade do Transmission: /%{transmission}.
-    \n• Velocidade do Sabnzbd: /%{sabnzbd}.
-    \n• Velocidade do qBittorrent: /%{qbittorrent}.
-    \n\nPara notificações quando o conteúdo estiver pronto: /%{notify}."
+    <b><b>Comandos Addarr</b></b>
+    \n<i>Ver este texto novamente? Use /%{help}</i>\n
+    \n• Necessita de autenticação prévia.
+        Use /%{authenticate} [palavra-passe]
+    \n• Adicionar conteúdo: /%{add}.
+    \n• Eliminar conteúdo: /%{delete}.
+    \n• Listar séries no Sonarr: /%{allSeries}.
+    \n• Listar filmes no Radarr: /%{allMovies}.
+    \n\n<b>Comandos diretos</b>
+    \n• Adição imediata: /%{movie} ou /%{serie}.
+    \n  Ex: %{movie} Superman ou %{serie} House.
+    \n\n<b>Definições de cliente</b>
+    \n• Velocidade Transmission: /%{transmission}.
+    \n• Velocidade Sabnzbd: /%{sabnzbd}.
+    \n• Velocidade qBittorrent: /%{qbittorrent}.
+    \n\n
+    Notificações quando media estiver pronto: /%{notify}."
 
   CommandDescriptions:  #ADDED
     Authenticate: Autenticar antes do primeiro uso

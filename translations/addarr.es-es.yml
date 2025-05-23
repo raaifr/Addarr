@@ -1,4 +1,4 @@
-# es-ES Spanish (Spain)
+﻿# es-ES Spanish (Spain)
 es-es:
   General:
     Start: Iniciar
@@ -17,27 +17,17 @@ es-es:
     SelectAPath: Por favor elige una ruta donde guardar
     SelectAQuality: Por favor, seleccione la calidad para la pelicula o serie
     SelectFromWhichSeason: Desde que temporada?
-    SelectedAndFutureSeasons: Temporadas seleccionadas y futuras
-    SelectAllSeasons: Seleccionar todas las temporadas
-    DeselectAllSeasons: Deseleccionar todas las temporadas
-    # Added missing key 'PreviousResult'
-    PreviousResult: Previous
-    # Added missing key 'NextResult'
-    NextResult: Next
+    PreviousResult: Anterior  #ADDED
+    NextResult: Siguiente  #ADDED
 
   Actions:
     Add: Si, añadir
     Delete: Sí, eliminala
     StopDelete: No, no quiero eliminarla
     Select: Si, selecciona esto
-    PreviousResult: Resultado anterior  #ADDED
-    NextResult: No, muestrame el siguiente resultado
-    # Added missing key 'SelectedAndFutureSeasons'
-    SelectedAndFutureSeasons: Selected and future seasons
-    # Added missing key 'Select all seasons'
-    Select all seasons: Select all seasons
-    # Added missing key 'DeselectAllSeasons'
-    DeselectAllSeasons: Deselect all seasons
+    SelectedAndFutureSeasons: Temporadas seleccionadas y futuras  #ADDED
+    SelectAllSeasons: Seleccionar todas las temporadas  #ADDED
+    DeselectAllSeasons: Deseleccionar todas las temporadas  #ADDED
 
   Authorization:
     Authorize: Necesitas autorizar este chat primero. ¿Cuál es la contraseña?
@@ -45,17 +35,14 @@ es-es:
     ChatID_Added: "Este chat ha sido autorizado correctamente. Ya puedes utilizar el bot."
     NotAdmin: "Necesitas ser admin para ejecutar este comando."
     ChatID_Allowed: "Este chat ya esta autorizado."
-    # Added missing key 'User_Added'
-    User_Added: The %{username} has been added to the list of allowed chats.
-    # Added missing key 'Accept'
-    Accept: Accept
-    # Added missing key 'Reject'
-    Reject: Reject
+    User_Added: El usuario %{username} ha sido añadido a la lista de chats permitidos.  #ADDED
+    Accept: Aceptar  #ADDED
+    Reject: Rechazar  #ADDED
 
-  Notifications:
-    ProfileCreated: Perfiles de notificación creados.  #ADDED
-    ProfileExists: Ya estás suscrito a notificaciones.  #ADDED
-    CreatingProfiles: Las suscripciones de notificaciones se crearán ahora.  #ADDED
+  Notifications:  #ADDED
+    ProfileCreated: Perfiles de notificación creados. 
+    ProfileExists: Ya estás suscrito a notificaciones.
+    CreatingProfiles: Las suscripciones de notificaciones se crearán ahora.
 
   Messages:
     Add: Si, añade esta %{subject}
@@ -76,8 +63,7 @@ es-es:
     zero: No se han encontrado resultados.
     one: Se ha encontrado un resultado.
     other: "Se han encontrado %{count} resultados. "
-    PreviousResult: Resultado anterior  #ADDED
-
+  
   Transmission:
     NotEnabled: "La funcion de Transmission no esta activada."
     Speed: "Que velocidad quieres que use Transmission?"
@@ -113,25 +99,27 @@ es-es:
     AddFailed: Error al añadir la %{subjectWithArticle} %{title} del usuario %{first_name} con chat_id %{chat_id}.
     Exist: La %{subjectWithArticle} %{title} que queria añadir el usuario %{first_name} con chat_id %{chat_id} ya existe.
     Delete: El usuario %{first_name} con chat_id %{chat_id} ha iniciado una nueva eliminación.
-    # Added missing key 'AuthRequest'
-    AuthRequest: The user %{username} [%{first_name} %{last_name}] with chat_id %{chat_id} has requested access to the bot services.
+    AuthRequest: El usuario %{username} [%{first_name} %{last_name}] con ID de chat %{chat_id} ha solicitado acceso a los servicios del bot.  #ADDED
 
+  #ADDED
   Help: "
-    <b>Comandos de Addarr</b>
-    \n<i>Para ver este texto de nuevo, usa /%{help}</i>
-    \n• Para autenticarte antes del primer uso debes usar /%{authenticate} [contraseña].
-    \n• Para añadir una serie o película usa /%{add}.
-    \n• Para eliminar una serie o película usa /%{delete}.
-    \n• Para comprobar que series hay en Sonarr usa /%{allSeries}.
-    \n• Para comprobar que películas hay en Radarr usa /%{allMovies}.
+    <b><b>Comandos de Addarr</b></b>
+    \n<i>¿Quieres ver este texto de nuevo? Usa /%{help}</i>\n
+    \n• Debes autorizarte antes del primer uso.
+        Usa /%{authenticate} [contraseña]
+    \n• Para añadir película o serie, usa /%{add}.
+    \n• Para eliminar película o serie, usa /%{delete}.
+    \n• Para listar series en Sonarr, usa /%{allSeries}.
+    \n• Para listar películas en Radarr, usa /%{allMovies}.
     \n\n<b>Comandos de una línea</b>
-    \n• Añadir directamente: /%{movie} o /%{serie}.
-    \n  Ejemplo: %{movie} Superman o %{serie} La Casa de Papel.
-    \n\n<b>Ajustes de cliente de descarga</b>
-    \n• Velocidad de Transmission: /%{transmission}.
-    \n• Velocidad de Sabnzbd: /%{sabnzbd}.
-    \n• Velocidad de qBittorrent: /%{qbittorrent}.
-    \n\nPara notificaciones cuando el contenido esté listo: /%{notify}."
+    \n• Para añadir inmediatamente película/serie: /%{movie} o /%{serie}.
+    \n  Ej: %{movie} Superman o %{serie} House.
+    \n\n<b>Ajustes cliente de descarga</b>
+    \n• Alternar velocidad en Transmission: /%{transmission}.
+    \n• Cambiar velocidad en Sabnzbd: /%{sabnzbd}.
+    \n• Cambiar velocidad en qBittorrent: /%{qbittorrent}.
+    \n\n
+    Notificaciones cuando el contenido esté listo: /%{notify}."
 
   CommandDescriptions:  #ADDED
     Authenticate: Autenticarse antes del primer uso

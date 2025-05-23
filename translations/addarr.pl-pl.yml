@@ -1,4 +1,4 @@
-# pl-PL Polish (Poland)
+﻿# pl-PL Polish (Poland)
 pl-pl:
   General:
     Start: Rozpocznij
@@ -17,27 +17,17 @@ pl-pl:
     SelectAPath: Wybierz ścieżkę dla filmu lub serialu
     SelectAQuality: Proszę wybrać profil jakościowy dla filmu lub serialu
     SelectFromWhichSeason: Od którego sezonu?
-    SelectedAndFutureSeasons: Wybrane i przyszłe sezony
-    SelectAllSeasons: Wybierz wszystkie sezony
-    DeselectAllSeasons: Odznacz wszystkie sezony
-    # Added missing key 'PreviousResult'
-    PreviousResult: Previous
-    # Added missing key 'NextResult'
-    NextResult: Next
+    PreviousResult: Poprzedni  #ADDED
+    NextResult: Następny  #ADDED
 
   Actions:
     Add: Tak, chcę to!
     Delete: Tak, usuń to
     StopDelete: Nie, nie chcę tego usuwać
-    Select: Wybierz: Tak, wybierz to
-    PreviousResult: Poprzedni wynik  #ADDED
-    NextResult: Próbuj dalej
-    # Added missing key 'SelectedAndFutureSeasons'
-    SelectedAndFutureSeasons: Selected and future seasons
-    # Added missing key 'Select all seasons'
-    Select all seasons: Select all seasons
-    # Added missing key 'DeselectAllSeasons'
-    DeselectAllSeasons: Deselect all seasons
+    Select: "Wybierz: Tak, wybierz to"
+    SelectedAndFutureSeasons: Wybrane i przyszłe sezony  #ADDED
+    SelectAllSeasons: Zaznacz wszystkie sezony  #ADDED
+    DeselectAllSeasons: Odznacz wszystkie sezony  #ADDED
 
   Authorization:
     Authorize: Musisz zautoryzować ten czat. Jakie jest hasło?
@@ -45,17 +35,14 @@ pl-pl:
     ChatID_Added: "Ten czat został dodany do whitelisty. Teraz możesz używać tego bota."
     NotAdmin: "Nie jesteś uprawniony do wykonania tej komendy!"
     ChatID_Allowed: "Ten czat już jest zautoryzowany."
-    # Added missing key 'User_Added'
-    User_Added: The %{username} has been added to the list of allowed chats.
-    # Added missing key 'Accept'
-    Accept: Accept
-    # Added missing key 'Reject'
-    Reject: Reject
+    User_Added: Użytkownik %{username} został dodany do listy dozwolonych czatów.  #ADDED
+    Accept: Zaakceptuj  #ADDED
+    Reject: Odrzuć  #ADDED
 
-  Notifications:
-    ProfileCreated: Profile powiadomień utworzone.  #ADDED
-    ProfileExists: Subskrybujesz już powiadomienia.  #ADDED
-    CreatingProfiles: Subskrypcje powiadomień będą teraz tworzone.  #ADDED
+  Notifications:  #ADDED
+    ProfileCreated: Profile powiadomień utworzone.
+    ProfileExists: Subskrybujesz już powiadomienia.
+    CreatingProfiles: Subskrypcje powiadomień będą teraz tworzone.
 
   Messages:
     Add: Tak, dodaj %{subject}
@@ -76,7 +63,6 @@ pl-pl:
     zero: Brak rezultatów
     one: Jeden rezultat
     other: "%{count} rezultatów"
-    PreviousResult: Poprzedni wynik  #ADDED
 
   Transmission:
     NotEnabled: "Funkcja Transmission jest nieaktywna."
@@ -113,25 +99,27 @@ pl-pl:
     AddFailed: Błąd dodawania %{subjectWithArticle} %{title} użytkownika %{first_name} z chat_id %{chat_id}.
     Exist: Artykuł %{subjectWithArticle} %{title}, który chciał dodać użytkownik %{first_name} with chat_id %{chat_id} już istnieje.
     Delete: Użytkownik %{first_name} z identyfikatorem chat_id %{chat_id} zainicjował nowe usunięcie.
-    # Added missing key 'AuthRequest'
-    AuthRequest: The user %{username} [%{first_name} %{last_name}] with chat_id %{chat_id} has requested access to the bot services.
+    AuthRequest: Użytkownik %{username} [%{first_name} %{last_name}] o ID czatu %{chat_id} zażądał dostępu do usług bota.  #ADDED
 
+  #ADDED
   Help: "
-    <b>Komendy Addarr</b>
-    \n<i>Potrzebujesz pomocy? Użyj /%{help}!</i>
-    \n• Autoryzacja: /%{authenticate} [hasło]
-    \n• Dodawanie: /%{add} (film/serial)
-    \n• Usuwanie: /%{delete} (film/serial)
-    \n• Lista seriali w Sonarr: /%{allSeries}
-    \n• Lista filmów w Radarr: /%{allMovies}
-    \n\n<b>Komendy jednoliniowe</b>
-    \n• Natychmiastowe dodawanie: /%{movie} lub /%{serie}.
-    \n  Przykład: %{movie} Superman lub %{serie} Wiedźmin.
-    \n\n<b>Ustawienia klientów pobierania</b>
-    \n• Prędkość Transmission: /%{transmission}
-    \n• Prędkość Sabnzbd: /%{sabnzbd}
-    \n• Prędkość qBittorrent: /%{qbittorrent}
-    \n\nPowiadomienia o gotowych mediach: /%{notify}."
+    <b><b>Polecenia Addarr</b></b>
+    \n<i>Ponownie zobaczyć ten tekst? Użyj /%{help}</i>\n
+    \n• Najpierw wymagana autoryzacja.
+        Użyj /%{authenticate} [hasło]
+    \n• Dodawanie: /%{add}.
+    \n• Usuwanie: /%{delete}.
+    \n• Lista seriali w Sonarr: /%{allSeries}.
+    \n• Lista filmów w Radarr: /%{allMovies}.
+    \n\n<b>Polecenia jednoliniowe</b>
+    \n• Bezpośrednie dodawanie: /%{movie} lub /%{serie}.
+    \n  Np: %{movie} Superman lub %{serie} House.
+    \n\n<b>Ustawienia klientów</b>
+    \n• Prędkość Transmission: /%{transmission}.
+    \n• Prędkość Sabnzbd: /%{sabnzbd}.
+    \n• Prędkość qBittorrent: /%{qbittorrent}.
+    \n\n
+    Powiadomienia o gotowości mediów: /%{notify}."
 
   CommandDescriptions:  #ADDED
     Authenticate: Autoryzuj przed pierwszym użyciem
