@@ -43,7 +43,7 @@ These are the default commands:
 - `/allMovies`: receive a list of all the movies on Radarr
 - `/allSeries`: receive a list of all the series on Sonarr
 - `/movie` | `/film` | `/filme` | `/película`: start adding a movie to Radarr  
-  You can also pass the title after the command: `/movie Godfathers` or the IMDB/TMDB ID: `/movie imdb:tt0068646`
+  You can also pass the title after the command: `/movie Godfather` or the IMDB/TMDB ID: `/movie imdb:tt0068646`
 - `/series` | `/serie`: start adding a series to Sonarr
   You can also pass the title after the command: `/series Friends` or the TVDB ID: `/series tvdb:79168`
 - `/notify`: creates a notification profile for Telegram in Sonarr/Radarr. Users will be notified when the media they've added, has been downloaded
