@@ -3,21 +3,21 @@ sonarr:
   instances:
     - label: tv # label must be a unique value from other labels
       server:
-        addr: 
+        addr:
         port: 8989 # Default is 8989
         path: / # Default is /. If set, it must start and finish with /. Eg: /sonarr/
         ssl: false # Default false
       auth:
-        apikey: 
-        username: 
-        password: 
+        apikey:
+        username:
+        password:
       search: true # Start search after adding series
       seasonFolder: true
       excludedRootFolders: # If set must not have a trailing slash Eg: /mnt/Media
-        - # First excluded folder, add others with a "-" on a new line (same indentation)
+        -  # First excluded folder, add others with a "-" on a new line (same indentation)
       narrowRootFolderNames: true # If true, only the last folder name will be shown instead of full path
       excludedQualityProfiles:
-        - # First excluded quality profile, add others with a "-" on a new line (same indentation)
+        -  # First excluded quality profile, add others with a "-" on a new line (same indentation)
       defaultTags:
         - addarr
       addRequesterIdTag: true # Add telegram user id as tag on series
@@ -25,14 +25,14 @@ sonarr:
 
     # - label: tv_4k # label must be a unique value from other labels
     #   server:
-    #     addr: 
+    #     addr:
     #     port: 8980
     #     path: / # Default is /. If set, it must start and finish with /. Eg: /sonarr/
     #     ssl: false # Default false
     #   auth:
-    #     apikey: 
-    #     username: 
-    #     password: 
+    #     apikey:
+    #     username:
+    #     password:
     #   search: true # Start search after adding series
     #   seasonFolder: true
     #   excludedRootFolders: # If set must not have a trailing slash Eg: /mnt/Media
@@ -50,18 +50,18 @@ radarr:
   instances:
     - label: movies # label must be a unique value from other labels
       server:
-        addr: 
+        addr:
         port: 7878 # Default is 7878
         path: / # Default is /. If set, it must start and finish with /. Eg: /radarr/
         ssl: false # Default false
       auth:
-        apikey: 
-        username: 
-        password: 
+        apikey:
+        username:
+        password:
       search: true # Start search after adding movie
       minimumAvailability: announced
       excludedRootFolders: # If set must not have a trailing slash Eg: /mnt/Media
-        - # First excluded folder, add others with a "-" on a new line (same indentation)
+        -  # First excluded folder, add others with a "-" on a new line (same indentation)
       narrowRootFolderNames: true # If true, only the last folder name will be shown instead of full path
       excludedQualityProfiles:
         -  # First excluded quality profile, add others with a "-" on a new line (same indentation)
@@ -72,14 +72,14 @@ radarr:
 
     # - label: movies_4k # label must be a unique value from other labels
     #   server:
-    #     addr: 
+    #     addr:
     #     port: 7870
     #     path: / # Default is /. If set, it must start and finish with /. Eg: /radarr/
     #     ssl: false # Default false
     #   auth:
-    #     apikey: 
-    #     username: 
-    #     password: 
+    #     apikey:
+    #     username:
+    #     password:
     #   search: true # Start search after adding movie
     #   minimumAvailability: announced
     #   excludedRootFolders: # If set must not have a trailing slash Eg: /mnt/Media
@@ -91,7 +91,7 @@ radarr:
     #     - addarr
     #   addRequesterIdTag: true # Add telegram user id as tag on movies
     #   adminRestrictions: false
-  
+
 # Telegram Configuration
 telegram:
   token:
@@ -101,9 +101,9 @@ telegram:
 transmission:
   enable: false # Enable the Transmission commands
   onlyAdmin: true # Transmission command  will only work for admins
-  host: # IP-adress of the Transmission service
+  host: # IP-address of the Transmission service
   authentication: true # Is Transmission protected with a password?
-  username: 
+  username:
   password:
 
 # Sabnzbd Configuration
@@ -125,20 +125,20 @@ qbittorrent:
   enable: false
   onlyAdmin: true
   server:
-    addr: 
+    addr:
     port: 8080 # Default is 8080
     path: / # Default is / . If set, it must start and finish with / . Eg: /qbittorrent/
     ssl: false # Default false
   auth:
-    username: 
-    password: 
+    username:
+    password:
 
 # Optional settings:
 ## Language
 language: en-us # de-de, en-us, es-es, fr-fr, it-it, nl-be, pl-pl, pt-pt, ru-ru
 
 ## Entrypoints
-entrypointHelp: help # help entrypoint
+entrypointHelp: help # help or a custom entrypoint
 entrypointAuth: auth # auth or a custom entrypoint
 entrypointAdd: start # start or a custom entrypoint
 entrypointDelete: delete # delete or a custom entrypoint

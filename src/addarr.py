@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import json
 import logging
 import re
 
@@ -117,10 +116,10 @@ def main():
         ],
         states={
             all.LS_GIVE_MOVIE_INSTANCE: [
-                CallbackQueryHandler(all.storeMovieInstance, pattern=r"^instance=(.+)")
+                CallbackQueryHandler(all.sendAll, pattern=r"^instance=(.+)")
             ],
             all.LS_GIVE_SERIE_INSTANCE: [
-                CallbackQueryHandler(all.storeSerieInstance, pattern=r"^instance=(.+)")
+                CallbackQueryHandler(all.sendAll, pattern=r"^instance=(.+)")
             ],
         },
         fallbacks=[
@@ -1109,7 +1108,7 @@ async def storePath(update : Update, context: ContextTypes.DEFAULT_TYPE):
         # There is only 1 quality profile, so use it!
         logger.debug("Only found 1 profile, so proceeding with that one...")
         context.user_data["qualityProfile"] = qualityProfiles[0]['id']
-        return await qualityProfiles(update, context)
+        return await storeQualityProfile(update, context)
 
     keyboard = []
     for q in qualityProfiles:
@@ -1425,7 +1424,7 @@ async def addNotificationChannel(update: Update, context: ContextTypes.DEFAULT_T
             status = radarr.createNotificationProfile(profileName, update.effective_chat.id)
             if status:
                 label = instance["label"]
-                logger.info(f"Successfully created notification profiles for radarr instance {label}")
+                logger.info(f"Successfully created notification profiles for Radarr instance {label}")
     
         
     for instance in sonarr_instances:
@@ -1436,7 +1435,7 @@ async def addNotificationChannel(update: Update, context: ContextTypes.DEFAULT_T
             status = sonarr.createNotificationProfile(profileName, update.effective_chat.id)
             if status:
                 label = instance["label"]
-                logger.info(f"Successfully created notification profiles for sonar instance {label}")
+                logger.info(f"Successfully created notification profiles for Sonarr instance {label}")
 
     await context.bot.send_message(
         chat_id=update.effective_message.chat_id,

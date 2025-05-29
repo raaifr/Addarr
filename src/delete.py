@@ -211,7 +211,7 @@ async def storeMediaInstance(update : Update, context: ContextTypes.DEFAULT_TYPE
     if not searchResult:
         await context.bot.send_message( 
             chat_id=update.effective_message.chat_id, 
-            text=i18n.t("addarr.searchresults", count=0),
+            text=i18n.t("addarr.SearchResults", count=0),
         )
         clearUserData(context)
         return ConversationHandler.END

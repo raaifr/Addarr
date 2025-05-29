@@ -1,6 +1,6 @@
 # en-US English (United States)
-en-us: 
-  General: 
+en-us:
+  General:
     Start: Start
     Stop: Stop
     Find: Find
@@ -32,13 +32,13 @@ en-us:
   Authorization:
     Authorize: You first need to authorize this chat. What is the password?
     WrongPassword: You entered the wrong password. Try again...
-    ChatID_Added: Welcome! You have been authorized. \nIf you entered a command, you need to execute it again.
+    ChatID_Added: "Welcome! You have been authorized. \nIf you entered a command, you need to execute it again."
     User_Added: The %{username} has been added to the list of allowed chats.
     NotAdmin: You need to be an admin to execute this command.
     ChatID_Allowed: This chat is already authorized.
     Accept: Accept
     Reject: Reject
-  
+
   Notifications:
     ProfileCreated: Notification profiles created. You will receive notifications when the media you add is downloaded.
     ProfileExists: You are already subscribed to notifications
@@ -54,10 +54,12 @@ en-us:
     DeleteSuccess: "%{subjectWithArticle} deleted successfully 🙂"
     Exist: "%{subjectWithArticle} already exists 😉"
     NoExist: "%{subjectWithArticle} does not exist"
-    LoadingAll: This may take a few mins depending on your library. Please wait . . . 
-    MissingConfig: "You are missing the following configkeys in your config.yaml file: %{missingKeys}.
+    LoadingAll: This may take a few mins depending on your library. Please wait . . .
+    MissingConfig:
+      "You are missing the following configkeys in your config.yaml file: %{missingKeys}.
       \nAdd these before restarting the bot."
-    ConfigError: "The following configkeys has a wrong value in your config.yaml file: %{wrongValues}.
+    ConfigError:
+      "The following configkeys has a wrong value in your config.yaml file: %{wrongValues}.
       \nChange these before restarting the bot."
     StartChatting: Start chatting with Addarr in Telegram. The first time you use "start" you will be asked to enter your password.
 
@@ -107,7 +109,7 @@ en-us:
     <b><b>Addarr Commands</b></b>
     \n<i>Want to see this text again? Use /%{help}</i>\n
     \n• You need to authorize yourself before first use.
-        Use /%{authenticate} [password]
+    Use /%{authenticate} [password]
     \n• To add a movie or series, use /%{add}.
     \n• To delete a movie or series, use /%{delete}.
     \n• To list series in Sonarr, you can use /%{allSeries}.
@@ -122,7 +124,7 @@ en-us:
     \n\n
     If you want to be notified when your media is ready to watch, use /%{notify}.
     "
-  
+
   CommandDescriptions:
     Authenticate: Authorize yourself before first use
     Add: Add new media
@@ -136,5 +138,3 @@ en-us:
     Sabnzbd: Change Sabnzbd  speed
     qBittorrent: Change qbittorrent speed
     Notify: Get notifications when media is ready
-
-

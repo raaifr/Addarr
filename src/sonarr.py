@@ -132,7 +132,7 @@ def getRootFolders():
     return parsed_json
 
 
-def allSeries():
+def getAllMedia():
     parameters = {}
     req = requests.get(commons.generateApiQuery("sonarr", "series", parameters))
     parsed_json = json.loads(req.text)
@@ -172,12 +172,11 @@ def getTags():
 
 def createTag(tag):
     data_json = {
-        "id": int(max([t["id"] for t in getTags()], default=0) + 1),
         "label": str(tag)
     }
     add = requests.post(commons.generateApiQuery("sonarr", "tag"), json=data_json, headers={'Content-Type': 'application/json'})
     response_content = json.loads(add.content.decode('utf-8'))
-    if add.status_code == 200:
+    if add.status_code == 200 or add.status_code == 201:
         return response_content["id"]
     else:
         return -1
@@ -221,7 +220,7 @@ def createNotificationProfile(profileName, chatid):
     logger.debug(f'Check if user tag exists: {chatid}')
     tag_id = tagExists(chatid)
 
-    if tag_id is None:
+    if tag_id is None or tag_id == -1:
         # create the tag first
         logger.debug(f'Creating user tag: {chatid}')
         tag_id = createTag(chatid)
